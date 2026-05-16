@@ -1,88 +1,139 @@
-# 🌬️ AirLyst: High-Precision AQI Forecasting Pipeline
+# <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20Places/Cloud%20with%20Lightning%20and%20Rain.png" alt="Cloud" width="45" height="45" /> AirLyst: The Future of AQI Forecasting
 
 <div align="center">
-  <img src="https://img.shields.io/badge/Python-3.9+-blue?style=for-the-badge&logo=python" />
-  <img src="https://img.shields.io/badge/MLOps-Hopsworks-orange?style=for-the-badge&logo=git" />
-  <img src="https://img.shields.io/badge/Status-Production--Ready-green?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/Data-Open--Meteo-blueviolet?style=for-the-badge" />
+
+[![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![MLOps](https://img.shields.io/badge/MLOps-Hopsworks-orange?style=for-the-badge&logo=git&logoColor=white)](https://www.hopsworks.ai/)
+[![Deep Learning](https://img.shields.io/badge/Deep--Learning-PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+---
+
+### 🌬️ "Predicting the air you breathe, before you step out."
+
+**AirLyst** is a state-of-the-art MLOps pipeline designed for Islamabad's high-precision AQI forecasting. It bridges the gap between raw environmental data and actionable health insights using a robust feature store and advanced time-series modeling.
+
+[Explore Docs](#) • [Report Bug](#) • [Request Feature](#)
+
 </div>
 
 ---
 
-## 🚀 Overview
-**AirLyst** is an end-to-end MLOps pipeline for high-precision time-series AQI forecasting in Islamabad. It integrates real-time air quality and weather data via a **Hopsworks Feature Store**, automating the full data lifecycle—from ingestion to advanced feature engineering—to deliver reliable 72-hour air quality predictions.
+## 🚀 Key Features
+
+- 🎯 **72-Hour Multi-step Forecasting**: Beyond just 'next-hour' predictions; we forecast the full 3-day horizon.
+- 🤖 **Hybrid Model Support**: Engineered for both **Random Forest** (high accuracy) and **Stacked LSTM** (sequence memory).
+- 📊 **Elite Feature Engineering**: Automated pipeline for 21+ features including AQI/PM2.5 Lags (1h-24h) and Rolling Averages.
+- ☁️ **Hopsworks Integration**: Production-grade Feature Store for centralized data versioning and model registry.
+- ⚡ **Real-time Ingestion**: Seamlessly fuses Open-Meteo weather data with Global Air Quality feeds.
 
 ---
 
 ## 🏗️ Project Architecture
+
 ```mermaid
-graph TD
-    A[Weather API] --> C[Data Merger]
+graph LR
+    subgraph "Data Ingestion"
+    A[Weather API] --> C{Data Merger}
     B[Air Quality API] --> C
+    end
+    
+    subgraph "Feature Pipeline"
     C --> D[Feature Engineer]
-    D --> E[Hopsworks Feature Store]
-    E --> F[Model Training - LSTM/RF]
-    F --> G[72h Forecast Inferences]
-    G --> H[Frontend Dashboard]
+    D --> E((Hopsworks Feature Store))
+    end
+    
+    subgraph "ML Engine"
+    E --> F[Training Pipeline]
+    F --> G[Model Registry]
+    G --> H[Inference Service]
+    end
+    
+    subgraph "Delivery"
+    H --> I[React Dashboard]
+    H --> J[API Endpoints]
+    end
+
+    style E fill:#f96,stroke:#333,stroke-width:4px
 ```
 
 ---
 
-## ✨ Key Features
-- **🎯 Super-Slim Pipeline:** Engineered 21+ elite features including temporal markers (hour, day, month), AQI lags (1h-24h), and PM2.5 rolling averages.
-- **☁️ Cloud-Native Feature Store:** Seamless integration with Hopsworks for data versioning and consistent training/inference.
-- **🧠 Advanced Forecasting:** Support for both high-performance Random Forest and Deep Learning (Stacked LSTM) architectures.
-- **⚡ Real-time Ingestion:** Automated data fetching and cleaning for Islamabad city metrics.
+## 📂 Project Structure Walkthrough
+
+```bash
+AirLyst/
+├── 📂 backend/                 # Core logic and API
+│   ├── 📂 src/
+│   │   ├── 📂 data_ingestion/  # Raw API clients (Weather/AQI)
+│   │   ├── 📂 feature_pipeline/# The heart of feature engineering
+│   │   ├── 📂 models/          # Model architectures (LSTM, RF)
+│   │   └── 📂 utils/           # Shared loggers and configs
+├── 📂 notebooks/               # Research, EDA & Experiments
+├── 📄 .env                     # Secrets (Ignored by Git)
+├── 📄 .gitignore               # Multi-layer exclusion rules
+├── 📄 requirements.txt         # Production dependencies
+└── 📄 README.md                # Project documentation
+```
 
 ---
 
-## 🛠️ Technology Stack
-- **Languages:** ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-- **Frameworks:** ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white) ![Scikit-Learn](https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white)
-- **MLOps:** ![Hopsworks](https://img.shields.io/badge/Hopsworks-FeatureStore-orange?style=for-the-badge)
-- **Data:** ![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white) ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
+## 🖼️ Model Performance Showcase
+
+<div align="center">
+  
+  | Feature | Importance | Model | R2 Score |
+  | :--- | :--- | :--- | :--- |
+  | **us_aqi_lag_1h** | 0.9595 | **Random Forest** | **0.99** |
+  | **pm2_5_rolling_24h**| 0.0146 | **LSTM** | **0.59** |
+  | **hour** | 0.0038 | **XGBoost** | *Upcoming* |
+
+</div>
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Installation & Setup
 
-### 1. Installation
+### 1. Clone & Environment
 ```bash
 git clone https://github.com/21Afnan/AirLyst.git
 cd AirLyst
+python -m venv venv
+source venv/Scripts/activate  # Windows: venv\Scripts\activate
+```
+
+### 2. Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 2. Run Feature Pipeline
+### 3. Run Pipeline
 ```bash
+# Engineer the "Certified" feature set
 python backend/src/feature_pipeline/feature_engineer.py
 ```
 
-### 3. Train Model
-```bash
-python backend/src/models/lstm_trainer.py
-```
-
 ---
 
-## 📊 Model Performance
-| Model | MAE | RMSE | R2 Score |
-| :--- | :--- | :--- | :--- |
-| Random Forest | ~1.5 | ~2.8 | 0.99 |
-| LSTM (20 Epochs) | 12.2 | 16.4 | 0.59 |
-
----
-
-## 🗺️ Roadmap
-- [x] Data Ingestion & Backfill
-- [x] Feature Engineering (Top 15 Elite)
-- [x] LSTM Baseline Training
-- [ ] Hopsworks Feature Store Sync (Phase 3)
-- [ ] Interactive Streamlit Dashboard
-- [ ] Daily Automated Forecasting Jobs
-
----
+## 📬 Connect & Collaborate
 
 <div align="center">
-  Developed with ❤️ for a cleaner Islamabad 🌿
+  <p>Looking for collaborations or technical discussions on MLOps!</p>
+
+  <a href="https://linkedin.com/in/afnanshoukat" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="mailto:afnanshoukat35@gmail.com">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/21Afnan" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" />
+  </a>
+
+  <br><br>
+  <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20Places/Rocket.png" alt="Rocket" width="80" />
+  
+  <p><b>Crafted with Precision by Afnan Shoukat</b></p>
 </div>
