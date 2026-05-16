@@ -70,7 +70,6 @@ if __name__ == "__main__":
     featured_df = engineer.add_features(raw_df)
     
     if not featured_df.empty:
-        # Set pandas options to show all columns clearly in the terminal
         pd.set_option('display.max_columns', None)
         pd.set_option('display.width', 1000)
 
