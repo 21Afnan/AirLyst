@@ -79,25 +79,18 @@ class FeatureStoreClient:
             return pd.DataFrame()
 
 if __name__ == "__main__":
-    from src.feature_pipeline.data_merger import DataMerger
-    from src.feature_pipeline.feature_engineer import FeatureEngineer
-
-    # 1. Initialize Clients
-    merger = DataMerger()
-    engineer = FeatureEngineer()
+    # Test reading data from Feature Store
     store = FeatureStoreClient()
-
-    # 2. Get the "Certified" Data
-    start, end = settings.get_backfill_dates()
-    logger.info(f"Backfilling data from {start} to {end}")
     
-    raw_df = merger.get_merged_dataset(start, end)
-    featured_df = engineer.add_features(raw_df)
-
-    if not featured_df.empty:
-        # 3. Connect and Upload
-        if store.connect():
-            store.upload_data(featured_df, group_name="aqi_islamabad_feat")
-            print("\n--- [ COMPLETE: DATA IS LIVE ON CLOUD] ---")
-    else:
-        logger.warning("No data found to upload.")
+    if store.connect():
+        df = store.read_data(group_name="aqi_islamabad_feat")
+        
+        if not df.empty:
+            print("\n" + "="*50)
+            print("SUCCESS: Data Fetched for Testing")
+            print("="*50)
+            print(f"Shape: {df.shape}")
+            print(df.head())
+            print("="*50)
+        else:
+            print("No data found in Feature Group.")

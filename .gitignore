@@ -40,6 +40,7 @@ Scripts/
 # Project Specific - Data & Secrets
 .env
 *.log
+logs/
 data/
 backend/data/
 *.csv
