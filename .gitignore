@@ -27,6 +27,7 @@ venv/
 evenv/
 env/
 .env/
+
 ENV/
 bin/
 Scripts/
