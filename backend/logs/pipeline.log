@@ -1,0 +1,256 @@
+2026-05-16 12:06:26,435 - ConfigLoader - INFO - Successfully loaded settings for: AirLyst AQI Predictor
+2026-05-16 12:12:29,917 - ConfigLoader - INFO - Successfully loaded settings for: AirLyst AQI Predictor
+2026-05-16 12:14:01,738 - ConfigLoader - INFO -  App Name: AirLyst AQI Predictor
+2026-05-16 12:14:01,750 - ConfigLoader - INFO -  Location: 33.72, 73.04
+2026-05-16 12:14:01,751 - ConfigLoader - INFO -  Weather URL: https://archive-api.open-meteo.com/v1/archive
+2026-05-16 12:14:01,751 - ConfigLoader - INFO -  Air Quality URL: https://air-quality-api.open-meteo.com/v1/air-quality
+2026-05-16 12:14:01,752 - ConfigLoader - INFO -  Hopsworks API Key found.
+2026-05-16 12:20:30,085 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:23:57,364 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:24:10,929 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:24:47,960 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:26:12,398 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:26:37,563 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:47:01,849 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 12:47:08,852 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:10:49,216 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:10:49,327 - WeatherClient - INFO - Requesting weather data for Islamabad [2026-05-09 to 2026-05-16]
+2026-05-16 13:10:49,936 - WeatherClient - INFO - Successfully validated 192 records.
+2026-05-16 13:12:51,427 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:12:51,545 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:12:52,689 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:14:14,148 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:14:14,253 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:14:15,538 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:15:13,377 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:15:13,485 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:15:14,736 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:21:04,968 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:21:05,323 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:21:06,428 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:21:06,431 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:21:07,800 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:21:07,802 - DataMerger - INFO - Merging weather and air quality datasets on 'time'...
+2026-05-16 13:21:07,833 - DataMerger - INFO - Successfully merged data. Final shape: (13152, 10)
+2026-05-16 13:21:16,606 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:21:16,843 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:21:17,994 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:21:17,995 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:21:19,281 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:21:19,284 - DataMerger - INFO - Merging weather and air quality datasets on 'time'...
+2026-05-16 13:21:19,291 - DataMerger - INFO - Successfully merged data. Final shape: (13152, 10)
+2026-05-16 13:23:25,103 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:23:25,347 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:23:26,542 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:23:26,545 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:23:28,002 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:23:28,005 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:23:28,005 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:23:28,005 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:23:28,014 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:23:28,014 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:23:28,014 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:23:28,014 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:27:23,907 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:27:24,155 - WeatherClient - INFO - Requesting weather data for Islamabad [2026-04-10 to 2026-05-16]
+2026-05-16 13:27:24,811 - WeatherClient - INFO - Successfully validated 888 records.
+2026-05-16 13:27:24,812 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2026-04-10 to 2026-05-16]
+2026-05-16 13:27:25,614 - AirQualityClient - INFO - Successfully validated 888 air quality records.
+2026-05-16 13:27:25,615 - DataMerger - INFO - Raw Weather data: (888, 4)
+2026-05-16 13:27:25,615 - DataMerger - INFO - Raw Air Quality data: (888, 7)
+2026-05-16 13:27:25,615 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:27:25,618 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:27:25,619 - DataMerger - INFO - -> Total Records:  888
+2026-05-16 13:27:25,619 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:27:25,619 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:27:25,619 - FeatureEngineer - INFO - Starting feature engineering on 888 records...
+2026-05-16 13:27:25,623 - FeatureEngineer - INFO - Added temporal features: hour, day_of_week, month.
+2026-05-16 13:27:25,624 - FeatureEngineer - INFO - Added lag features: 1h and 24h.
+2026-05-16 13:27:25,627 - FeatureEngineer - INFO - Added rolling window features: 7-day average.
+2026-05-16 13:27:25,631 - FeatureEngineer - INFO - Dropped 167 rows due to NaN values from lags.
+2026-05-16 13:27:25,631 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 16
+2026-05-16 13:33:42,501 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:33:42,742 - WeatherClient - INFO - Requesting weather data for Islamabad [2026-04-10 to 2026-05-16]
+2026-05-16 13:33:43,408 - WeatherClient - INFO - Successfully validated 888 records.
+2026-05-16 13:33:43,409 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2026-04-10 to 2026-05-16]
+2026-05-16 13:33:44,378 - AirQualityClient - INFO - Successfully validated 888 air quality records.
+2026-05-16 13:33:44,378 - DataMerger - INFO - Raw Weather data: (888, 4)
+2026-05-16 13:33:44,379 - DataMerger - INFO - Raw Air Quality data: (888, 7)
+2026-05-16 13:33:44,379 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:33:44,382 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:33:44,382 - DataMerger - INFO - -> Total Records:  888
+2026-05-16 13:33:44,382 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:33:44,383 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:33:44,383 - FeatureEngineer - INFO - Engineering Top 15 impactful features...
+2026-05-16 13:33:44,386 - FeatureEngineer - INFO - Feature engineering complete. Retained 19 columns.
+2026-05-16 13:34:02,811 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:34:03,059 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:34:04,207 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:34:04,209 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:34:05,683 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:34:05,686 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:34:05,686 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:34:05,686 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:34:05,692 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:34:05,693 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:34:05,693 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:34:05,693 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:34:05,695 - FeatureEngineer - INFO - Engineering Top 15 impactful features...
+2026-05-16 13:34:05,702 - FeatureEngineer - INFO - Feature engineering complete. Retained 19 columns.
+2026-05-16 13:35:07,664 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:35:07,915 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:35:08,936 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:35:08,939 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:35:10,345 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:35:10,348 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:35:10,348 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:35:10,350 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:35:10,355 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:35:10,355 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:35:10,356 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:35:10,356 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:35:10,357 - FeatureEngineer - INFO - Starting feature engineering on 13152 records...
+2026-05-16 13:40:09,552 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:40:17,548 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:40:18,764 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:40:18,770 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:40:20,203 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:40:20,207 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:40:20,207 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:40:20,207 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:40:20,213 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:40:20,213 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:40:20,213 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:40:20,214 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:40:20,214 - FeatureEngineer - INFO - Starting feature engineering on 13152 records...
+2026-05-16 13:40:20,220 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 19
+2026-05-16 13:40:20,221 - FeatureEngineer - INFO - Training a dummy RandomForest model to verify features...
+2026-05-16 13:41:45,271 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:41:46,138 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:41:47,414 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:41:47,417 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:41:48,683 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:41:48,686 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:41:48,687 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:41:48,687 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:41:48,693 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:41:48,693 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:41:48,694 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:41:48,694 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:41:48,694 - FeatureEngineer - INFO - Engineering 'Super Slim' elite feature set...
+2026-05-16 13:41:48,699 - FeatureEngineer - INFO - Super Slim pipeline complete. Retained 9 columns.
+2026-05-16 13:41:48,700 - FeatureEngineer - INFO - Verifying accuracy of Super Slim feature set...
+2026-05-16 13:43:30,185 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:43:30,388 - WeatherClient - INFO - Requesting weather data for Islamabad [2025-11-15 to 2026-05-16]
+2026-05-16 13:43:31,242 - WeatherClient - INFO - Successfully validated 4392 records.
+2026-05-16 13:43:31,243 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2025-11-15 to 2026-05-16]
+2026-05-16 13:43:32,243 - AirQualityClient - INFO - Successfully validated 4392 air quality records.
+2026-05-16 13:43:32,244 - DataMerger - INFO - Raw Weather data: (4392, 4)
+2026-05-16 13:43:32,246 - DataMerger - INFO - Raw Air Quality data: (4392, 7)
+2026-05-16 13:43:32,246 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:43:32,250 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:43:32,251 - DataMerger - INFO - -> Total Records:  4392
+2026-05-16 13:43:32,251 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:43:32,251 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:43:32,252 - FeatureEngineer - INFO - Engineering 'Super Slim' elite feature set...
+2026-05-16 13:43:32,254 - FeatureEngineer - INFO - Super Slim pipeline complete. Retained 9 columns.
+2026-05-16 13:43:33,945 - LSTMTrainer - INFO - Starting LSTM training for 10 epochs...
+2026-05-16 13:43:37,772 - LSTMTrainer - INFO - Epoch [5/10], Loss: 0.0165
+2026-05-16 13:43:41,695 - LSTMTrainer - INFO - Epoch [10/10], Loss: 0.0105
+2026-05-16 13:43:41,696 - LSTMTrainer - INFO - LSTM Training Complete.
+2026-05-16 13:43:58,175 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:43:58,370 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:43:59,517 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:43:59,518 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:44:00,836 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:44:00,839 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:44:00,839 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:44:00,839 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:44:00,843 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:44:00,843 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:44:00,845 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:44:00,845 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:44:00,845 - FeatureEngineer - INFO - Engineering 'Super Slim' elite feature set...
+2026-05-16 13:44:00,849 - FeatureEngineer - INFO - Super Slim pipeline complete. Retained 9 columns.
+2026-05-16 13:44:02,065 - LSTMTrainer - INFO - Starting LSTM training for 20 epochs...
+2026-05-16 13:44:13,591 - LSTMTrainer - INFO - Epoch [5/20], Loss: 0.0134
+2026-05-16 13:44:25,782 - LSTMTrainer - INFO - Epoch [10/20], Loss: 0.0118
+2026-05-16 13:44:37,867 - LSTMTrainer - INFO - Epoch [15/20], Loss: 0.0108
+2026-05-16 13:44:52,446 - LSTMTrainer - INFO - Epoch [20/20], Loss: 0.0096
+2026-05-16 13:44:52,448 - LSTMTrainer - INFO - LSTM Training Complete.
+2026-05-16 13:46:02,622 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:46:02,889 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:46:04,296 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:46:04,298 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:46:05,820 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:46:05,823 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:46:05,823 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:46:05,824 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:46:05,828 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:46:05,829 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:46:05,829 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:46:05,829 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:46:05,829 - FeatureEngineer - INFO - Engineering 'Super Slim' elite feature set...
+2026-05-16 13:46:05,833 - FeatureEngineer - INFO - Super Slim pipeline complete. Retained 9 columns.
+2026-05-16 13:46:06,931 - LSTMTrainer - INFO - Training LSTM on 10426 sequences...
+2026-05-16 13:46:08,736 - LSTMTrainer - INFO - Epoch [1/20], Loss: 0.0312
+2026-05-16 13:46:15,877 - LSTMTrainer - INFO - Epoch [5/20], Loss: 0.0140
+2026-05-16 13:46:25,818 - LSTMTrainer - INFO - Epoch [10/20], Loss: 0.0127
+2026-05-16 13:46:37,045 - LSTMTrainer - INFO - Epoch [15/20], Loss: 0.0117
+2026-05-16 13:46:46,728 - LSTMTrainer - INFO - Epoch [20/20], Loss: 0.0109
+2026-05-16 13:48:08,330 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:48:08,586 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:48:09,842 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:48:09,844 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:48:11,258 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:48:11,263 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:48:11,295 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:48:11,306 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:48:11,319 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:48:11,352 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:48:11,352 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:48:11,353 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:48:11,353 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 13:48:11,361 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 19. Rows: 13128
+2026-05-16 13:49:20,498 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:49:20,738 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:49:21,795 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:49:21,797 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:49:23,086 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:49:23,090 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:49:23,091 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:49:23,091 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:49:23,099 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:49:23,099 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:49:23,099 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:49:23,100 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:49:23,100 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 13:49:23,110 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 13:50:46,882 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:50:47,130 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:50:48,237 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:50:48,239 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:50:49,628 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:50:49,631 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:50:49,632 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:50:49,633 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:50:49,638 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:50:49,638 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:50:49,639 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:50:49,639 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:50:49,640 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 13:50:49,650 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 13:51:34,220 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 13:51:34,473 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:51:35,552 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 13:51:35,554 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 13:51:36,940 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 13:51:36,943 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 13:51:36,943 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 13:51:36,943 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 13:51:36,949 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 13:51:36,950 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 13:51:36,951 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 13:51:36,951 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 13:51:36,951 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 13:51:36,959 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
