@@ -254,3 +254,99 @@
 2026-05-16 13:51:36,951 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
 2026-05-16 13:51:36,951 - FeatureEngineer - INFO - Engineering features for 13152 records...
 2026-05-16 13:51:36,959 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 16:37:23,614 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 16:37:24,397 - FeatureStoreClient - INFO - Backfilling data from 2024-11-15 to 2026-05-16
+2026-05-16 16:37:24,397 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:37:25,575 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 16:37:25,579 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:37:27,196 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 16:37:27,198 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 16:37:27,200 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 16:37:27,200 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 16:37:27,217 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 16:37:27,218 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 16:37:27,218 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 16:37:27,218 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 16:37:27,220 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 16:37:27,232 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 16:37:27,232 - FeatureStoreClient - INFO - Connecting to Hopsworks Feature Store...
+2026-05-16 16:37:29,980 - FeatureStoreClient - ERROR - FAILED to connect to Hopsworks: Pyarrow package not found. If you want to use Apache Arrow with Hopsworks you can install the corresponding extras via `pip install "hopsworks[python]"`. You can also install pyarrow directly in your environment with `pip install pyarrow`. You will need to restart your kernel if applicable.
+2026-05-16 16:46:58,816 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 16:46:58,930 - FeatureStoreClient - INFO - Backfilling data from 2024-11-15 to 2026-05-16
+2026-05-16 16:46:58,931 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:47:00,140 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 16:47:00,142 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:47:01,414 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 16:47:01,418 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 16:47:01,419 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 16:47:01,419 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 16:47:01,427 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 16:47:01,428 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 16:47:01,428 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 16:47:01,428 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 16:47:01,429 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 16:47:01,438 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 16:47:01,439 - FeatureStoreClient - INFO - Connecting to Hopsworks Feature Store...
+2026-05-16 16:47:04,043 - FeatureStoreClient - ERROR - FAILED to connect to Hopsworks: Pyarrow package not found. If you want to use Apache Arrow with Hopsworks you can install the corresponding extras via `pip install "hopsworks[python]"`. You can also install pyarrow directly in your environment with `pip install pyarrow`. You will need to restart your kernel if applicable.
+2026-05-16 16:50:37,928 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 16:50:38,041 - FeatureStoreClient - INFO - Backfilling data from 2024-11-15 to 2026-05-16
+2026-05-16 16:50:38,042 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:50:41,475 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 16:50:41,477 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:50:42,839 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 16:50:42,843 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 16:50:42,843 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 16:50:42,844 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 16:50:42,850 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 16:50:42,851 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 16:50:42,851 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 16:50:42,851 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 16:50:42,852 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 16:50:42,861 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 16:50:42,862 - FeatureStoreClient - INFO - Connecting to Hopsworks Feature Store...
+2026-05-16 16:50:47,196 - FeatureStoreClient - INFO - SUCCESS: Connected to project 'Airlyst'
+2026-05-16 16:50:47,197 - FeatureStoreClient - INFO - Preparing Feature Group: 'aqi_islamabad_feat' (v1)...
+2026-05-16 16:50:47,473 - FeatureStoreClient - INFO - Inserting 13128 records into Feature Store...
+2026-05-16 16:50:50,977 - FeatureStoreClient - ERROR - FAILED to upload data: Confluent Kafka package not found. If you want to use Kafka with Hopsworks you can install the corresponding extras via `pip install "hopsworks[python]"`. You can also install confluent-kafka directly in your environment with `pip install confluent-kafka`. You will need to restart your kernel if applicable.
+2026-05-16 16:52:43,817 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 16:52:43,958 - FeatureStoreClient - INFO - Backfilling data from 2024-11-15 to 2026-05-16
+2026-05-16 16:52:43,958 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:52:46,328 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 16:52:46,331 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:52:47,709 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 16:52:47,712 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 16:52:47,713 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 16:52:47,714 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 16:52:47,718 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 16:52:47,719 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 16:52:47,719 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 16:52:47,719 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 16:52:47,720 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 16:52:47,728 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 16:52:47,728 - FeatureStoreClient - INFO - Connecting to Hopsworks Feature Store...
+2026-05-16 16:52:51,812 - FeatureStoreClient - INFO - SUCCESS: Connected to project 'Airlyst'
+2026-05-16 16:52:51,813 - FeatureStoreClient - INFO - Preparing Feature Group: 'aqi_islamabad_feat' (v1)...
+2026-05-16 16:52:53,053 - FeatureStoreClient - INFO - Inserting 13128 records into Feature Store...
+2026-05-16 16:53:06,070 - FeatureStoreClient - INFO - SUCCESS: Data successfully pushed to 'aqi_islamabad_feat'
+2026-05-16 16:53:07,541 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 16:53:07,644 - FeatureStoreClient - INFO - Backfilling data from 2024-11-15 to 2026-05-16
+2026-05-16 16:53:07,645 - WeatherClient - INFO - Requesting weather data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:53:08,693 - WeatherClient - INFO - Successfully validated 13152 records.
+2026-05-16 16:53:08,696 - AirQualityClient - INFO - Requesting Air Quality data for Islamabad [2024-11-15 to 2026-05-16]
+2026-05-16 16:53:10,104 - AirQualityClient - INFO - Successfully validated 13152 air quality records.
+2026-05-16 16:53:10,106 - DataMerger - INFO - Raw Weather data: (13152, 4)
+2026-05-16 16:53:10,106 - DataMerger - INFO - Raw Air Quality data: (13152, 7)
+2026-05-16 16:53:10,108 - DataMerger - INFO - Starting Inner Join on 'time' column...
+2026-05-16 16:53:10,114 - DataMerger - INFO - SUCCESS: Merged Dataset created.
+2026-05-16 16:53:10,116 - DataMerger - INFO - -> Total Records:  13152
+2026-05-16 16:53:10,116 - DataMerger - INFO - -> Total Features: 10
+2026-05-16 16:53:10,117 - DataMerger - INFO - -> Feature List:   ['time', 'temperature_2m', 'surface_pressure', 'wind_speed_10m', 'pm2_5', 'pm10', 'sulphur_dioxide', 'carbon_monoxide', 'nitrogen_dioxide', 'us_aqi']
+2026-05-16 16:53:10,118 - FeatureEngineer - INFO - Engineering features for 13152 records...
+2026-05-16 16:53:10,125 - FeatureEngineer - INFO - Feature engineering complete. Total columns: 21. Rows: 13128
+2026-05-16 16:53:10,125 - FeatureStoreClient - INFO - Connecting to Hopsworks Feature Store...
+2026-05-16 16:53:14,335 - FeatureStoreClient - INFO - SUCCESS: Connected to project 'Airlyst'
+2026-05-16 16:53:14,335 - FeatureStoreClient - INFO - Preparing Feature Group: 'aqi_islamabad_feat' (v1)...
+2026-05-16 16:53:15,555 - FeatureStoreClient - INFO - Inserting 13128 records into Feature Store...
+2026-05-16 16:53:23,085 - FeatureStoreClient - INFO - SUCCESS: Data successfully pushed to 'aqi_islamabad_feat'
+2026-05-16 16:54:33,514 - ConfigLoader - INFO - SUCCESS: All settings loaded for AirLyst AQI Predictor in Islamabad
+2026-05-16 16:54:33,515 - FeatureStoreClient - INFO - Connecting to Hopsworks Feature Store...
