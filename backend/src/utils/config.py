@@ -61,6 +61,12 @@ class Settings:
         start_date = end_date - timedelta(days=int(years * 365))
         return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
 
+    def get_update_dates(self, days=7):
+        """Calculates start and end dates for incremental daily updates."""
+        end_date = datetime.now().date()
+        start_date = end_date - timedelta(days=days)
+        return start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")
+
     def print_settings(self):
         """Debug function to verify loaded settings."""
         print("\n--- [DEBUG] CURRENT LOADED SETTINGS ---")
