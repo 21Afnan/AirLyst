@@ -35,16 +35,15 @@ class FeatureStoreClient:
             return False
 
     def upload_data(self, df: pd.DataFrame, group_name: str, version: int = 1):
-        """Creates or updates a feature group and inserts data."""
+        """Creates or updates a feature group, inserts data and returns row counts."""
         if self.fs is None:
             logger.error("No active Feature Store connection. Call connect() first.")
-            return
+            return 0, 0
 
         try:
             logger.info(f"Preparing Feature Group: '{group_name}' (v{version})...")
             
             # 1. Define the Feature Group
-            # We use 'time' as the primary key and event_time for time-series support
             aqi_fg = self.fs.get_or_create_feature_group(
                 name=group_name,
                 version=version,
@@ -53,14 +52,29 @@ class FeatureStoreClient:
                 description="Engineered AQI and Weather features for Islamabad (72h Forecast Pipeline)"
             )
 
-            # 2. Insert Data
+            # 2. Get Count Before
+            try:
+                # We try to read current data to get the count
+                existing_df = aqi_fg.read()
+                count_before = len(existing_df)
+            except:
+                count_before = 0
+
+            # 3. Insert Data
             logger.info(f"Inserting {len(df)} records into Feature Store...")
-            aqi_fg.insert(df)
+            # We use write_options={"wait_for_job": True} to ensure synchronicity for our summary
+            aqi_fg.insert(df, write_options={"wait_for_job": True})
             
-            logger.info(f"SUCCESS: Data successfully pushed to '{group_name}'")
+            # 4. Get Count After
+            updated_df = aqi_fg.read()
+            count_after = len(updated_df)
+            
+            logger.info(f"SUCCESS: Data pushed. Before: {count_before} | After: {count_after}")
+            return count_before, count_after
             
         except Exception as e:
             logger.error(f"FAILED to upload data: {str(e)}")
+            return 0, 0
 
     def read_data(self, group_name: str, version: int = 1) -> pd.DataFrame:
         """Reads data from a feature group and returns it as a DataFrame."""

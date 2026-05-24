@@ -51,47 +51,16 @@ def run_pipeline():
     # 4. Upload to Hopsworks
     store = FeatureStoreClient()
     logger.info("Connecting to Hopsworks...")
+    
+    count_before = 0
+    count_after = 0
+    
     if store.connect():
         logger.info("Uploading data to Hopsworks Feature Group...")
-        store.upload_data(featured_df, group_name="aqi_islamabad_feat")
+        count_before, count_after = store.upload_data(featured_df, group_name="aqi_islamabad_feat")
     else:
         logger.error("Hopsworks connection failed. ABORTING pipeline to prevent silent failure.")
         sys.exit(1)
-
-    # 5. Update local CSV fallback
-    local_data_dir = BACKEND_DIR / "data"
-    local_data_dir.mkdir(parents=True, exist_ok=True)
-    csv_path = local_data_dir / "engineered_features.csv"
-
-    existing_rows = 0
-    new_total_rows = 0
-    added_rows = 0
-    file_existed = csv_path.exists()
-
-    # If the file exists, merge the new features with existing local data and drop duplicates to keep history
-    if file_existed:
-        try:
-            logger.info("Merging new features with local CSV database...")
-            existing_df = pd.read_csv(csv_path)
-            existing_rows = len(existing_df)
-            
-            existing_df["time"] = pd.to_datetime(existing_df["time"])
-            featured_df["time"] = pd.to_datetime(featured_df["time"])
-            
-            combined_df = pd.concat([existing_df, featured_df], ignore_index=True)
-            combined_df = combined_df.drop_duplicates(subset=["time"]).sort_values("time").reset_index(drop=True)
-            combined_df.to_csv(csv_path, index=False)
-            new_total_rows = len(combined_df)
-            added_rows = new_total_rows - existing_rows
-        except Exception as e:
-            logger.error(f"Error merging with local CSV: {e}")
-            featured_df.to_csv(csv_path, index=False)
-            new_total_rows = len(featured_df)
-            added_rows = len(featured_df)
-    else:
-        featured_df.to_csv(csv_path, index=False)
-        new_total_rows = len(featured_df)
-        added_rows = len(featured_df)
 
     # Print summary of pipeline execution
     print("\n" + "="*65)
@@ -100,10 +69,9 @@ def run_pipeline():
     print(f"Data Fetching Window:   {start_date} to {end_date}")
     print(f"Engineered Time Range:  {featured_df['time'].min()} to {featured_df['time'].max()}")
     print(f"New Rows Engineered:    {len(featured_df)}")
-    print(f"Local Database Before:  {existing_rows} rows")
-    print(f"Local Database After:   {new_total_rows} rows (Total Dataset Size)")
-    print(f"New Unique Rows Added:  {added_rows} rows")
-    print(f"Hopsworks Status:       Pushed {len(featured_df)} rows to Feature Store")
+    print(f"Hopsworks DB Before:    {count_before} rows")
+    print(f"Hopsworks DB After:     {count_after} rows (Total Dataset Size)")
+    print(f"New Unique Rows Added:  {count_after - count_before} rows")
     print("="*65 + "\n")
 
 if __name__ == "__main__":

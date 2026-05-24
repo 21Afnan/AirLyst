@@ -20,84 +20,53 @@ router = APIRouter(
 )
 
 # Helper function to find average of a list of numbers
-def calculate_average(numbers_list):
-    total = sum(numbers_list)
-    count = len(numbers_list)
-    return total / count
+def calculate_average(nums):
+    return sum(nums) / len(nums) if nums else 0
 
 @router.get("")
 def get_forecast():
     """
-    Returns 72-hour AQI Forecast.
-    Gives daily summaries (averages) and raw hourly forecasts.
+    Main endpoint to return current AQI and future daily/hourly forecasts.
     """
     try:
-        # 1. Run the ML model inference to get hourly predictions
-        hourly_predictions = run_inference()
+        # 1. Fetch prediction data from the ML inference pipeline
+        data = run_inference()
         
-        if not hourly_predictions:
-            raise HTTPException(status_code=404, detail="No predictions found.")
-        
-        # 2. Group hourly predictions by their Date (YYYY-MM-DD)
-        daily_groups = {}
-        for item in hourly_predictions:
-            # Extract date part (YYYY-MM-DD) from the time string
-            date_key = item["time"].split(" ")[0]
-            
-            # If the date is not yet in our dictionary, create an empty list
-            if date_key not in daily_groups:
-                daily_groups[date_key] = []
-            
-            # Add this hour's prediction to the list for this date
-            daily_groups[date_key].append(item)
-            
-        # 3. Calculate daily averages using simple loops
-        daily_summaries = []
-        for date_key in sorted(daily_groups.keys()):
-            hours_data = daily_groups[date_key]
-            
-            # Collect all AQI scores for this specific day
-            our_aqis = []
-            open_meteo_aqis = []
-            for h in hours_data:
-                our_aqis.append(h["aqi"])
-                open_meteo_aqis.append(h["open_meteo_aqi"])
-                
-            # Find the average AQI score for both models
-            avg_our_aqi = calculate_average(our_aqis)
-            avg_open_meteo = calculate_average(open_meteo_aqis)
-            
-            # Convert decimal average to nearest round integer
-            rounded_our_aqi = int(round(avg_our_aqi))
-            rounded_open_meteo = int(round(avg_open_meteo))
-            
-            # Get the AQI health status category (e.g. Good, Moderate)
-            status_desc = get_aqi_status(rounded_our_aqi)
-            
-            # Set hazardous flag if average AQI is above 150
-            is_hazardous = False
-            if rounded_our_aqi > 150:
-                is_hazardous = True
-                
-            # Create a simple dictionary summary for this day
-            day_summary = {
-                "date": date_key,
-                "avg_aqi": rounded_our_aqi,
-                "avg_open_meteo_aqi": rounded_open_meteo,
-                "status": status_desc,
-                "hazardous": is_hazardous
-            }
-            daily_summaries.append(day_summary)
-            
-        # 4. Return combined response back to frontend
+        current_aqi = data.get("current")
+        forecast_list = data.get("forecast", [])
+
+        # 2. Group hourly predictions by date to calculate daily averages
+        days_map = {}
+        for item in forecast_list:
+            # Extract date (YYYY-MM-DD) from the time string
+            day_name = item["time"].split(" ")[0] 
+            if day_name not in days_map:
+                days_map[day_name] = []
+            # Append the AQI value to the list for this specific day
+            days_map[day_name].append(item["aqi"])
+
+        # 3. Calculate Average AQI and Status for each day
+        summaries = []
+        for i, (date, aqi_values) in enumerate(sorted(days_map.items())):
+            # Calculate mean AQI for the day
+            avg = sum(aqi_values) / len(aqi_values)
+            summaries.append({
+                "label": f"Day {i+1}",
+                "date": date,
+                "avg_aqi": int(round(avg)),
+                "status": get_aqi_status(avg)
+            })
+
+        # 4. Return the structured response
         return {
-            "success": True,
-            "daily_forecast": daily_summaries,
-            "hourly_forecast": hourly_predictions
+            "current": current_aqi,
+            "summaries": summaries,
+            "raw_hourly": forecast_list
         }
         
-    except Exception as error:
-        raise HTTPException(status_code=500, detail=str(error))
+    except Exception as e:
+        # Catch unexpected errors and return a 500 status code
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/latest")

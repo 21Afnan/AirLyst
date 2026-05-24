@@ -128,37 +128,46 @@ def run_inference() -> list[dict]:
         logger.error("Inference aborted: feature engineering returned empty dataframe.")
         return []
 
-    # Step 4: Filter only FUTURE rows (after current time)
-    now = pd.Timestamp.now()
+    # Step 4: Separate CURRENT vs FUTURE rows
+    now = pd.Timestamp.now().floor('H')  # Round down to the nearest hour
+    
+    # Current is the row exactly at 'now' or the last one before 'now'
+    current_df = featured_df[featured_df["time"] <= now].tail(1)
+    # Future is everything after 'now'
     future_df = featured_df[featured_df["time"] > now].copy()
-    logger.info(f"Future rows for prediction: {len(future_df)} hours")
+    
+    logger.info(f"Context: {len(current_df)} current row, {len(future_df)} future hours.")
 
-    if future_df.empty:
-        logger.error("Inference aborted: no future rows available after feature engineering.")
-        return []
+    if current_df.empty and future_df.empty:
+        logger.error("Inference aborted: no data available after feature engineering.")
+        return {"current": None, "forecast": []}
 
     # Step 5: Load model and scaler, then predict
     model, scaler, feature_cols = load_model_and_scaler()
 
-    X = future_df[feature_cols]
+    # Combine for prediction to avoid double loading
+    to_predict_df = pd.concat([current_df, future_df], ignore_index=True)
+    X = to_predict_df[feature_cols]
     X_scaled = pd.DataFrame(scaler.transform(X), columns=feature_cols)
     raw_preds = model.predict(X_scaled)
 
-    # Step 6: Build clean output list
+    # Step 6: Build clean output
     predictions = []
-    for i, (_, row) in enumerate(future_df.iterrows()):
-        our_aqi        = max(0, int(round(raw_preds[i])))
-        openmeteo_aqi  = max(0, int(round(row["us_aqi"])))
-        predictions.append({
+    for i, (_, row) in enumerate(to_predict_df.iterrows()):
+        val = {
             "time":           row["time"].strftime("%Y-%m-%d %H:%M"),
-            "aqi":            our_aqi,
-            "status":         get_aqi_status(our_aqi),
-            "hazardous":      our_aqi > 150,
-            "open_meteo_aqi": openmeteo_aqi,
-        })
+            "aqi":            int(round(raw_preds[i])),
+            "status":         get_aqi_status(raw_preds[i]),
+            "hazardous":      raw_preds[i] > 150,
+            "open_meteo_aqi": int(round(row["us_aqi"])),
+        }
+        predictions.append(val)
 
-    logger.info(f"Inference complete. Total predictions: {len(predictions)} hours")
-    return predictions
+    # Separate current and forecast in the returned list
+    return {
+        "current": predictions[0] if not current_df.empty else None,
+        "forecast": predictions[1:] if not current_df.empty else predictions
+    }
 
 
 # ──────────────────────────────────────────────────────────────
@@ -167,13 +176,19 @@ def run_inference() -> list[dict]:
 
 if __name__ == "__main__":
     results = run_inference()
-    if results:
+    forecast = results.get("forecast", [])
+    current = results.get("current")
+    
+    if current:
+        print(f"\nCURRENT AQI: {current['aqi']} ({current['status']})")
+        
+    if forecast:
         print(f"\n{'='*75}")
         print(f"   72h AQI FORECAST FOR {settings.CITY.upper()} — Actual vs Predicted")
         print(f"{'='*75}")
         print(f"{'Time':<22} {'Open-Meteo':>10}  {'Our Model':>10}  {'Diff':>5}  {'Status'}")
         print(f"{'-'*75}")
-        for r in results:
+        for r in forecast:
             diff = r['aqi'] - r['open_meteo_aqi']
             diff_str = f"+{diff}" if diff > 0 else str(diff)
             print(
@@ -184,5 +199,5 @@ if __name__ == "__main__":
                 f"{r['status']}"
             )
         print(f"{'='*75}")
-        print(f"Total: {len(results)} hour predictions\n")
+        print(f"Total: {len(forecast)} hour predictions\n")
 
