@@ -1,13 +1,445 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <title>AirLyst — AI-Powered Air Quality Intelligence</title>
+    <meta name="description" content="72-Hour AI-Powered AQI Forecasting for Islamabad, Pakistan" />
+
+    <!-- Google Fonts: Syne (display) + DM Sans (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap"
+        rel="stylesheet" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <!-- ═══════════════════════════════════════════
+       ANIMATED BACKGROUND CANVAS
+  ═══════════════════════════════════════════ -->
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+    <!-- ═══════════════════════════════════════════
+       STICKY NAVIGATION BAR
+  ═══════════════════════════════════════════ -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-inner">
+            <div class="nav-brand">
+                <span class="nav-logo" aria-hidden="true">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M7 14 Q10 8 14 10 Q18 12 21 8" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" fill="none" />
+                        <path d="M7 18 Q11 13 14 15 Q17 17 21 12" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" fill="none" opacity="0.5" />
+                        <circle cx="14" cy="14" r="2" fill="currentColor" />
+                    </svg>
+                </span>
+                <span class="nav-title">AirLyst</span>
+            </div>
+            <div class="nav-meta">
+                <span class="nav-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                    </svg>
+                    Islamabad, PK
+                </span>
+                <div class="nav-live-badge" id="navLiveBadge">
+                    <span class="pulse-dot"></span>
+                    <span>Live</span>
+                </div>
+                <span class="nav-time" id="navTime"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════
+       MAIN CONTENT WRAPPER
+  ═══════════════════════════════════════════ -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ─────────────────────────────────────────
+         SECTION 1: HERO HEADER
+    ───────────────────────────────────────── -->
+        <section class="hero-section" id="hero" aria-label="Hero — Current AQI Overview">
+
+            <!-- Animated blobs -->
+            <div class="hero-blobs" aria-hidden="true">
+                <div class="blob blob-1"></div>
+                <div class="blob blob-2"></div>
+                <div class="blob blob-3"></div>
+            </div>
+
+            <div class="hero-inner">
+
+                <!-- Left: Headline -->
+                <div class="hero-text fade-up">
+                    <div class="hero-eyebrow">
+                        <span class="eyebrow-chip">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+                            </svg>
+                            AI Intelligence
+                        </span>
+                    </div>
+                    <h1 class="hero-title">
+                        <span class="title-line">Air Quality</span>
+                        <span class="title-line title-accent">Intelligence</span>
+                    </h1>
+                    <p class="hero-subtitle">AI-Powered 72-Hour Air Quality Forecasting<br>for Islamabad, Pakistan</p>
+
+                    <!-- AQI Status Chip -->
+                    <div class="hero-status-row">
+                        <div class="aqi-status-chip" id="heroStatusChip">
+                            <span class="status-icon" id="heroStatusIcon">●</span>
+                            <span id="heroStatusText">Loading…</span>
+                        </div>
+                        <div class="hero-updated">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                            <span id="heroUpdatedTime">Fetching data…</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Animated AQI Gauge -->
+                <div class="hero-gauge-wrapper fade-up delay-2">
+                    <div class="gauge-container" id="gaugeContainer">
+                        <svg class="gauge-svg" viewBox="0 0 260 160" aria-label="AQI Gauge">
+                            <!-- Background arc -->
+                            <path class="gauge-track" d="M30,140 A100,100 0 0,1 230,140" stroke-linecap="round" />
+                            <!-- Colored segments -->
+                            <path class="gauge-seg seg-good" d="M30,140 A100,100 0 0,1 72,61" stroke-linecap="round" />
+                            <path class="gauge-seg seg-moderate" d="M72,61  A100,100 0 0,1 130,40"
+                                stroke-linecap="round" />
+                            <path class="gauge-seg seg-sensitive" d="M130,40 A100,100 0 0,1 188,61"
+                                stroke-linecap="round" />
+                            <path class="gauge-seg seg-unhealthy" d="M188,61 A100,100 0 0,1 230,140"
+                                stroke-linecap="round" />
+                            <!-- Needle -->
+                            <g id="gaugeNeedle" transform="rotate(-90 130 140)">
+                                <line x1="130" y1="140" x2="130" y2="55" stroke-linecap="round" />
+                                <circle cx="130" cy="140" r="7" />
+                            </g>
+                        </svg>
+
+                        <!-- Center AQI Number -->
+                        <div class="gauge-center">
+                            <div class="gauge-aqi-value" id="gaugeAqi">—</div>
+                            <div class="gauge-aqi-label">AQI</div>
+                        </div>
+
+                        <!-- Scale Labels -->
+                        <div class="gauge-labels" aria-hidden="true">
+                            <span class="gl gl-0">0</span>
+                            <span class="gl gl-100">100</span>
+                            <span class="gl gl-200">200</span>
+                            <span class="gl gl-300">300</span>
+                        </div>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="gauge-legend" aria-label="AQI Legend">
+                        <div class="legend-item"><span class="legend-dot dot-good"></span>Good</div>
+                        <div class="legend-item"><span class="legend-dot dot-moderate"></span>Moderate</div>
+                        <div class="legend-item"><span class="legend-dot dot-sensitive"></span>Sensitive</div>
+                        <div class="legend-item"><span class="legend-dot dot-unhealthy"></span>Unhealthy</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────
+         SECTION 2: CURRENT AQI PANEL
+    ───────────────────────────────────────── -->
+        <section class="section current-panel" id="currentPanel" aria-label="Current AQI Conditions">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <h2 class="section-title">Current Conditions</h2>
+                    <p class="section-sub">Real-time air quality metrics for Islamabad</p>
+                </div>
+
+                <div class="metrics-grid">
+
+                    <!-- AQI Card -->
+                    <div class="metric-card metric-card--aqi fade-up delay-1" id="aqiCard">
+                        <div class="metric-glow" id="aqiGlow"></div>
+                        <div class="metric-icon-wrap">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path
+                                    d="M17 8C8 10 5.9 16.17 3.82 19c-.9 1.23-1 2 .18 2 1 0 2.08-.83 3-2C8 18 11 15 15 13c0 2-1 4.03-2 5 2 0 5-1 7-5 2.5-5 1-10-3-10z" />
+                                <path d="M11 10C8.5 9 7 8 7 6c0-1 .5-2 1.5-2.5" />
+                            </svg>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-label">Current AQI</span>
+                            <span class="metric-value" id="currentAqi">—</span>
+                            <span class="metric-status" id="currentStatus">Loading…</span>
+                        </div>
+                        <div class="metric-trend" id="aqiTrend" aria-hidden="true">
+                            <div class="trend-bar-track">
+                                <div class="trend-bar-fill" id="aqiBarFill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Temperature Card -->
+                    <div class="metric-card fade-up delay-2" id="tempCard">
+                        <div class="metric-icon-wrap">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+                            </svg>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-label">Temperature</span>
+                            <span class="metric-value" id="currentTemp">—</span>
+                            <span class="metric-status">Islamabad</span>
+                        </div>
+                        <div class="metric-sparkline" aria-hidden="true">
+                            <canvas id="tempSparkline" width="80" height="32"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- PM2.5 Card -->
+                    <div class="metric-card fade-up delay-3" id="pm25Card">
+                        <div class="metric-icon-wrap">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12" r="4" />
+                                <line x1="12" y1="2" x2="12" y2="6" />
+                                <line x1="12" y1="18" x2="12" y2="22" />
+                                <line x1="2" y1="12" x2="6" y2="12" />
+                                <line x1="18" y1="12" x2="22" y2="12" />
+                            </svg>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-label">PM2.5</span>
+                            <span class="metric-value" id="currentPm25">—</span>
+                            <span class="metric-status" id="pm25Status">μg/m³</span>
+                        </div>
+                        <div class="metric-trend">
+                            <div class="trend-bar-track">
+                                <div class="trend-bar-fill pm25-fill" id="pm25BarFill"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Forecast Horizon Card -->
+                    <div class="metric-card fade-up delay-4" id="horizonCard">
+                        <div class="metric-icon-wrap">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.8">
+                                <rect x="3" y="4" width="18" height="18" rx="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                        <div class="metric-body">
+                            <span class="metric-label">Forecast Horizon</span>
+                            <span class="metric-value">72<span style="font-size:1.4rem;opacity:.6">h</span></span>
+                            <span class="metric-status">AI Model Active</span>
+                        </div>
+                        <div class="metric-ai-badge">AI ✦</div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────
+         SECTION 3: 3-DAY FORECAST CARDS
+    ───────────────────────────────────────── -->
+        <section class="section forecast-section" id="forecastSection" aria-label="3-Day Forecast Summary">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <h2 class="section-title">3-Day Forecast</h2>
+                    <p class="section-sub">AI-generated daily outlook for Islamabad</p>
+                </div>
+
+                <!-- Skeleton + Real Cards -->
+                <div class="forecast-grid" id="forecastGrid">
+                    <!-- JS populates this -->
+                    <div class="forecast-skeleton skeleton"></div>
+                    <div class="forecast-skeleton skeleton"></div>
+                    <div class="forecast-skeleton skeleton"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────
+         SECTION 4: 72-HOUR INTERACTIVE CHARTS
+    ───────────────────────────────────────── -->
+        <section class="section charts-section" id="chartsSection" aria-label="72-Hour Forecast Charts">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <h2 class="section-title">72-Hour Forecast</h2>
+                    <p class="section-sub">Detailed hourly predictions powered by machine learning</p>
+                </div>
+
+                <!-- Tab Switcher -->
+                <div class="chart-tabs fade-up delay-1" role="tablist" aria-label="Chart type selector">
+                    <button class="chart-tab active" data-tab="aqi" role="tab" aria-selected="true">AQI</button>
+                    <button class="chart-tab" data-tab="temp" role="tab" aria-selected="false">Temperature</button>
+                    <button class="chart-tab" data-tab="pm25" role="tab" aria-selected="false">PM2.5</button>
+                </div>
+
+                <!-- Chart Panels -->
+                <div class="chart-panels fade-up delay-2">
+                    <div class="chart-panel active" id="panel-aqi" role="tabpanel">
+                        <div class="chart-card">
+                            <div class="chart-card-header">
+                                <div>
+                                    <h3 class="chart-card-title">AQI Trend</h3>
+                                    <p class="chart-card-sub">Air Quality Index — 72h forecast</p>
+                                </div>
+                                <div class="chart-badge">Live Forecast</div>
+                            </div>
+                            <div class="chart-wrap skeleton" id="aqiChartWrap">
+                                <canvas id="aqiChart" aria-label="AQI Line Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-panel" id="panel-temp" role="tabpanel">
+                        <div class="chart-card">
+                            <div class="chart-card-header">
+                                <div>
+                                    <h3 class="chart-card-title">Temperature Forecast</h3>
+                                    <p class="chart-card-sub">°C — 72-hour area chart</p>
+                                </div>
+                                <div class="chart-badge chart-badge--green">Thermal</div>
+                            </div>
+                            <div class="chart-wrap skeleton" id="tempChartWrap">
+                                <canvas id="tempChart" aria-label="Temperature Area Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-panel" id="panel-pm25" role="tabpanel">
+                        <div class="chart-card">
+                            <div class="chart-card-header">
+                                <div>
+                                    <h3 class="chart-card-title">PM2.5 Particles</h3>
+                                    <p class="chart-card-sub">μg/m³ — Fine particulate matter</p>
+                                </div>
+                                <div class="chart-badge chart-badge--orange">Particles</div>
+                            </div>
+                            <div class="chart-wrap skeleton" id="pm25ChartWrap">
+                                <canvas id="pm25Chart" aria-label="PM2.5 Bar Chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────
+         SECTION 5: AI INSIGHTS
+    ───────────────────────────────────────── -->
+        <section class="section insights-section" id="insightsSection" aria-label="Air Quality Insights">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <h2 class="section-title">AI Insights</h2>
+                    <p class="section-sub">Smart recommendations generated by our forecast model</p>
+                </div>
+
+                <div class="insights-grid" id="insightsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ─────────────────────────────────────────
+         SECTION 6: MODEL EXPLANATION (SHAP)
+    ───────────────────────────────────────── -->
+        <section class="section shap-section fade-up" id="shapSection" aria-label="Model Interpretability">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Model Decision Insights (SHAP)</h2>
+                    <p class="section-sub">Explaining how the AI computes AQI predictions</p>
+                </div>
+
+                <div class="shap-container" id="shapContainer">
+                    <div class="shap-grid">
+                        <!-- Left: Features Chart -->
+                        <div class="shap-chart-card">
+                            <h3 class="shap-card-title">Top Features Driving Predictions</h3>
+                            <div class="shap-features-list" id="shapFeaturesList">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Right: Explanations text -->
+                        <div class="shap-text-card">
+                            <h3 class="shap-card-title">Plain English Explanation</h3>
+                            <div class="shap-text-content">
+                                <div class="shap-text-item">
+                                    <span class="shap-bullet bullet-blue"></span>
+                                    <p><strong>AQI Lag values (1h & 3h)</strong> have the absolute highest impact on forecasts. This means the model heavily relies on the very recent state of the atmosphere (temporal auto-correlation) to predict the next hour.</p>
+                                </div>
+                                <div class="shap-text-item">
+                                    <span class="shap-bullet bullet-indigo"></span>
+                                    <p><strong>PM2.5 24-hour rolling averages</strong> help the model capture the daily baseline trend of particulate matter levels, smoothing out any sharp hourly fluctuations.</p>
+                                </div>
+                                <div class="shap-text-item">
+                                    <span class="shap-bullet bullet-purple"></span>
+                                    <p><strong>Diurnal cycle (hour) & temperature</strong> act as fine-tuning parameters, explaining minor changes in AQI due to daylight progression, human activities (traffic peaks), and thermal dispersion.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════ -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="footer-logo">
+                    <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+                        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M7 14 Q10 8 14 10 Q18 12 21 8" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" fill="none" />
+                        <circle cx="14" cy="14" r="2" fill="currentColor" />
+                    </svg>
+                </span>
+                <span class="footer-name">AirLyst</span>
+            </div>
+            <p class="footer-tagline">Powered by <strong>AI</strong> + <strong>FastAPI</strong> +
+                <strong>Hopsworks</strong></p>
+            <p class="footer-copy">© 2026 AirLyst. Environmental intelligence for cleaner futures.</p>
+        </div>
+    </footer>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+    <script src="Script.js"></script>
+</body>
+
 </html>
