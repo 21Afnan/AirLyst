@@ -64,7 +64,7 @@ def run_pipeline():
 
     # Print summary of pipeline execution
     print("\n" + "="*65)
-    print("           📊 FEATURE PIPELINE EXECUTION SUMMARY 📊")
+    print("           [FEATURE PIPELINE EXECUTION SUMMARY]")
     print("="*65)
     print(f"Data Fetching Window:   {start_date} to {end_date}")
     print(f"Engineered Time Range:  {featured_df['time'].min()} to {featured_df['time'].max()}")

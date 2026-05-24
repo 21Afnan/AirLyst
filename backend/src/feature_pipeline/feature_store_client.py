@@ -43,38 +43,22 @@ class FeatureStoreClient:
         try:
             logger.info(f"Preparing Feature Group: '{group_name}' (v{version})...")
             
-            # 1. Define the Feature Group
+            # 1. Define the Feature Group with online_enabled=True
             aqi_fg = self.fs.get_or_create_feature_group(
                 name=group_name,
                 version=version,
                 primary_key=['time'],
                 event_time='time',
+                online_enabled=True,
                 description="Engineered AQI and Weather features for Islamabad (72h Forecast Pipeline)"
             )
 
-            # 2. Get Count Before
-            try:
-                # We try to read current data to get the count
-                existing_df = aqi_fg.read()
-                count_before = len(existing_df)
-            except:
-                count_before = 0
-
-            # 3. Insert Data
+            # 2. Insert Data
             logger.info(f"Inserting {len(df)} records into Feature Store...")
-            # Use write_options={"wait_for_job": True} for accurate counts
-            # Default write_method can be "upsert" or "insert"
-            aqi_fg.insert(df, write_options={"wait_for_job": True})
+            aqi_fg.insert(df)
             
-            # 4. Get Count After (Add a small delay or retry if needed, but wait_for_job=True helps)
-            try:
-                updated_df = aqi_fg.read()
-                count_after = len(updated_df)
-            except:
-                count_after = count_before + len(df) # Fallback estimate if read fails again
-            
-            logger.info(f"SUCCESS: Data pushed. Before: {count_before} | After: {count_after}")
-            return count_before, count_after
+            logger.info(f"SUCCESS: Data successfully pushed to '{group_name}'")
+            return 0, len(df)
             
         except Exception as e:
             logger.error(f"FAILED to upload data: {str(e)}")
@@ -89,7 +73,7 @@ class FeatureStoreClient:
         try:
             logger.info(f"Reading data from Feature Group: '{group_name}' (v{version})...")
             fg = self.fs.get_feature_group(name=group_name, version=version)
-            df = fg.read()
+            df = fg.read(online=True)
             logger.info(f"SUCCESS: Retrieved {len(df)} records from '{group_name}'")
             return df
         except Exception as e:
