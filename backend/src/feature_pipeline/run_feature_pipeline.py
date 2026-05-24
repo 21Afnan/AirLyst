@@ -55,7 +55,8 @@ def run_pipeline():
         logger.info("Uploading data to Hopsworks Feature Group...")
         store.upload_data(featured_df, group_name="aqi_islamabad_feat")
     else:
-        logger.warning("Hopsworks connection failed. Will only update the local fallback CSV.")
+        logger.error("Hopsworks connection failed. ABORTING pipeline to prevent silent failure.")
+        sys.exit(1)
 
     # 5. Update local CSV fallback
     local_data_dir = BACKEND_DIR / "data"

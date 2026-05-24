@@ -170,6 +170,7 @@ def register_to_hopsworks(best_model_name: str, best_metrics: dict):
         logger.info("SUCCESS: Model successfully registered and uploaded to Hopsworks Model Registry!")
     except Exception as e:
         logger.error(f"FAILED to register model to Hopsworks: {e}")
+        raise e
 
 if __name__ == "__main__":
     train_and_evaluate()

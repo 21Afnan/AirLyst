@@ -20,7 +20,8 @@ matplotlib==3.10.1
 seaborn==0.13.2
 
 # Feature Store (Latest)
-hopsworks
+hopsworks==4.7.*
+pyarrow
 
 # Machine Learning
 scikit-learn==1.6.1

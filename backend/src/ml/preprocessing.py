@@ -27,7 +27,12 @@ def load_data(group_name: str = "aqi_islamabad_feat", version: int = 1) -> pd.Da
             return df
             
     logger.warning("Falling back to local CSV data...")
-    return pd.read_csv(ROOT_DIR / "backend/data/engineered_features.csv")
+    csv_path = ROOT_DIR / "backend/data/engineered_features.csv"
+    if not csv_path.exists():
+        logger.error(f"Local fallback CSV not found at {csv_path}. ABORTING.")
+        sys.exit(1)
+        
+    return pd.read_csv(csv_path)
 
 def split_and_scale(df: pd.DataFrame, target_col: str = "us_aqi", split_ratio: float = 0.8):
     """Sorts, splits chronologically, scales features, and saves the scaler."""
