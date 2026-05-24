@@ -25,7 +25,7 @@ def run_pipeline():
     logger.info("Starting Feature Pipeline Execution...")
 
     # Determine Date Range: Fetch the last 7 days to compute lags and rolling windows correctly
-    start_date, end_date = settings.get_backfill_dates(years=1.5)
+    start_date, end_date = settings.get_update_dates(days=7)
     logger.info(f"Running in DAILY UPDATE mode from {start_date} to {end_date}")
 
     # 2. Merge Data
