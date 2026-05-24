@@ -46,11 +46,13 @@ def get_forecast():
         for i, (date, aqi_values) in enumerate(sorted(days_map.items())):
             # Calculate mean AQI for the day
             avg = sum(aqi_values) / len(aqi_values)
+            rounded_avg = int(round(avg))
             summaries.append({
                 "label": f"Day {i+1}",
                 "date": date,
-                "avg_aqi": int(round(avg)),
-                "status": get_aqi_status(avg)
+                "avg_aqi": rounded_avg,
+                "status": get_aqi_status(rounded_avg),
+                "is_hazardous": bool(rounded_avg > 150)
             })
 
         # 4. Return the structured response

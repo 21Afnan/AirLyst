@@ -158,7 +158,7 @@ def run_inference() -> list[dict]:
             "time":           row["time"].strftime("%Y-%m-%d %H:%M"),
             "aqi":            int(round(raw_preds[i])),
             "status":         get_aqi_status(raw_preds[i]),
-            "hazardous":      raw_preds[i] > 150,
+            "hazardous":      bool(raw_preds[i] > 150),
             "open_meteo_aqi": int(round(row["us_aqi"])),
         }
         predictions.append(val)
