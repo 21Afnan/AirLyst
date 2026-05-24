@@ -1,0 +1,41 @@
+======================================================================
+                  [AQI MODEL SHAP EXPLANATION REPORT]
+======================================================================
+
+Model Explained:    LightGBM
+Dataset Size:       13128 records
+
+Mean Absolute SHAP Values (Feature Impact on Predicted AQI):
+----------------------------------------------------------------------
+1  | us_aqi_lag_1h             | Impact: ~27.7683 AQI points
+2  | us_aqi_lag_3h             | Impact: ~2.9304 AQI points
+3  | pm2_5_rolling_24h         | Impact: ~2.7177 AQI points
+4  | hour                      | Impact: ~0.6338 AQI points
+5  | temperature_2m            | Impact: ~0.5975 AQI points
+6  | nitrogen_dioxide          | Impact: ~0.4782 AQI points
+7  | sulphur_dioxide           | Impact: ~0.2711 AQI points
+8  | pm2_5_rolling_6h          | Impact: ~0.2442 AQI points
+9  | pm2_5_lag_24h             | Impact: ~0.1637 AQI points
+10 | us_aqi_lag_24h            | Impact: ~0.1218 AQI points
+11 | pm2_5                     | Impact: ~0.0913 AQI points
+12 | pm10                      | Impact: ~0.0653 AQI points
+13 | us_aqi_lag_6h             | Impact: ~0.0523 AQI points
+14 | pm2_5_lag_6h              | Impact: ~0.0478 AQI points
+15 | month                     | Impact: ~0.0461 AQI points
+16 | carbon_monoxide           | Impact: ~0.0400 AQI points
+17 | wind_speed_10m            | Impact: ~0.0364 AQI points
+18 | surface_pressure          | Impact: ~0.0331 AQI points
+19 | day_of_week               | Impact: ~0.0127 AQI points
+----------------------------------------------------------------------
+
+Top Feature Interpretations:
+----------------------------
+- us_aqi_lag_1h: On average, this feature shifts the predicted AQI by 27.77 points.
+  -> Interpretation: Past AQI values are highly predictive of future AQI (strong temporal dependency).
+
+- us_aqi_lag_3h: On average, this feature shifts the predicted AQI by 2.93 points.
+  -> Interpretation: Past AQI values are highly predictive of future AQI (strong temporal dependency).
+
+- pm2_5_rolling_24h: On average, this feature shifts the predicted AQI by 2.72 points.
+  -> Interpretation: Recent trends and moving averages have a significant smoothing impact on forecasts.
+

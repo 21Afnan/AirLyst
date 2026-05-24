@@ -71,21 +71,11 @@ def fetch_forecast_air_quality() -> pd.DataFrame:
 # 2. LOAD MODEL + SCALER (from Hopsworks Model Registry)
 # ──────────────────────────────────────────────────────────────
 
+from src.ml.model_loader import load_model_and_scaler as _load_model_and_scaler
+
 def load_model_and_scaler():
-    """Downloads the latest registered model and scaler from Hopsworks Model Registry."""
-    import hopsworks
-    project  = hopsworks.login()
-    mr       = project.get_model_registry()
-
-    # get_model() with no version → automatically fetches the latest version
-    hw_model = mr.get_model("aqi_forecast_model")
-    model_dir = Path(hw_model.download())  # downloads all files to a temp dir
-
-    model    = joblib.load(model_dir / "best_model.joblib")
-    scaler   = joblib.load(model_dir / "scaler.joblib")
-    metadata = joblib.load(model_dir / "best_model_metadata.joblib")
-
-    logger.info(f"Loaded model from Hopsworks: {metadata['model_name']} (v{hw_model.version})")
+    """Downloads/loads the latest registered model and scaler using the unified model loader."""
+    model, scaler, metadata = _load_model_and_scaler()
     return model, scaler, metadata["feature_cols"]
 
 
