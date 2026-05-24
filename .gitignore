@@ -43,8 +43,8 @@ Scripts/
 *.log
 logs/
 data/
-backend/data/
-*.csv
+
+
 *.parquet
 *.json
 !backend/src/utils/config.json  # Keep config structure if needed (but ignore secrets)
