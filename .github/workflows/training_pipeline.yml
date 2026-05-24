@@ -11,9 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
 
-    permissions:
-      contents: write
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -42,12 +39,5 @@ jobs:
           FORECAST_URL: "https://api.open-meteo.com/v1/forecast"
         run: |
           python backend/src/ml/training.py
-
-      - name: Commit and Push updated model binaries
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add -f backend/models/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Automated update of trained model binaries" && git push)
 
 

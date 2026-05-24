@@ -141,7 +141,7 @@ def run_inference() -> list[dict]:
     model, scaler, feature_cols = load_model_and_scaler()
 
     X = future_df[feature_cols]
-    X_scaled = scaler.transform(X)
+    X_scaled = pd.DataFrame(scaler.transform(X), columns=feature_cols)
     raw_preds = model.predict(X_scaled)
 
     # Step 6: Build clean output list
