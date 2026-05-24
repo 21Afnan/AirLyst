@@ -10,9 +10,6 @@ jobs:
   train-and-evaluate:
     runs-on: ubuntu-latest
 
-    # Add write permissions so that GitHub Actions can commit updated model binaries back to repository
-    permissions:
-      contents: write
 
     steps:
       - name: Checkout Repository
