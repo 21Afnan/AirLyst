@@ -19,10 +19,6 @@ router = APIRouter(
     tags=["Forecast"]
 )
 
-# Helper function to find average of a list of numbers
-def calculate_average(nums):
-    return sum(nums) / len(nums) if nums else 0
-
 @router.get("")
 def get_forecast():
     """
@@ -68,25 +64,3 @@ def get_forecast():
         # Catch unexpected errors and return a 500 status code
         raise HTTPException(status_code=500, detail=str(e))
 
-
-@router.get("/latest")
-def get_latest():
-    """
-    Returns the latest single prediction (current hour).
-    """
-    try:
-        # Run ML model inference to get predictions
-        hourly_predictions = run_inference()
-        
-        if not hourly_predictions:
-            raise HTTPException(status_code=404, detail="No predictions available.")
-            
-        # The first item in the list represents the current/nearest hour prediction
-        latest_prediction = hourly_predictions[0]
-        
-        return {
-            "success": True,
-            "latest": latest_prediction
-        }
-    except Exception as error:
-        raise HTTPException(status_code=500, detail=str(error))

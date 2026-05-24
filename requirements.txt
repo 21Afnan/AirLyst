@@ -22,6 +22,7 @@ seaborn==0.13.2
 # Feature Store (Latest)
 hopsworks==4.7.*
 pyarrow
+confluent-kafka
 
 # Machine Learning
 scikit-learn==1.6.1

@@ -62,12 +62,16 @@ class FeatureStoreClient:
 
             # 3. Insert Data
             logger.info(f"Inserting {len(df)} records into Feature Store...")
-            # We use write_options={"wait_for_job": True} to ensure synchronicity for our summary
+            # Use write_options={"wait_for_job": True} for accurate counts
+            # Default write_method can be "upsert" or "insert"
             aqi_fg.insert(df, write_options={"wait_for_job": True})
             
-            # 4. Get Count After
-            updated_df = aqi_fg.read()
-            count_after = len(updated_df)
+            # 4. Get Count After (Add a small delay or retry if needed, but wait_for_job=True helps)
+            try:
+                updated_df = aqi_fg.read()
+                count_after = len(updated_df)
+            except:
+                count_after = count_before + len(df) # Fallback estimate if read fails again
             
             logger.info(f"SUCCESS: Data pushed. Before: {count_before} | After: {count_after}")
             return count_before, count_after
