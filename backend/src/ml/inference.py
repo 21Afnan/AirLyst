@@ -141,6 +141,21 @@ def run_inference() -> list[dict]:
     X_scaled = pd.DataFrame(scaler.transform(X), columns=feature_cols)
     raw_preds = model.predict(X_scaled)
 
+    # Calculate live SHAP values for the predictions
+    shap_vals_arr = None
+    try:
+        import shap
+        import numpy as np
+        explainer = shap.TreeExplainer(model)
+        shap_vals = explainer.shap_values(X_scaled)
+        if hasattr(shap_vals, "values"):
+            shap_vals_arr = shap_vals.values
+        else:
+            shap_vals_arr = shap_vals
+        shap_vals_arr = np.array(shap_vals_arr)
+    except Exception as e:
+        logger.error(f"Failed to calculate live SHAP values during inference: {e}")
+
     # Step 6: Build clean output
     predictions = []
     for i, (_, row) in enumerate(to_predict_df.iterrows()):
@@ -150,7 +165,20 @@ def run_inference() -> list[dict]:
             "status":         get_aqi_status(raw_preds[i]),
             "hazardous":      bool(raw_preds[i] > 150),
             "open_meteo_aqi": int(round(row["us_aqi"])),
+            "pm2_5":          float(row["pm2_5"]),
+            "pm10":           float(row["pm10"]),
+            "sulphur_dioxide": float(row["sulphur_dioxide"]),
+            "nitrogen_dioxide": float(row["nitrogen_dioxide"]),
+            "carbon_monoxide": float(row["carbon_monoxide"]),
+            "temperature_2m":  float(row["temperature_2m"]),
+            "surface_pressure": float(row["surface_pressure"]),
+            "wind_speed_10m":  float(row["wind_speed_10m"]),
         }
+        if shap_vals_arr is not None:
+            val["shap"] = {
+                feature_cols[col_idx]: float(shap_vals_arr[i, col_idx])
+                for col_idx in range(len(feature_cols))
+            }
         predictions.append(val)
 
     # Separate current and forecast in the returned list

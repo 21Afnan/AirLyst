@@ -30,36 +30,89 @@ def get_forecast():
         
         current_aqi = data.get("current")
         forecast_list = data.get("forecast", [])
+        
+        # 2. Format the next 24 hours of forecast predictions
+        forecast_24h = []
+        for item in forecast_list[:24]:
+            time_str = item["time"].split(" ")[1] if " " in item["time"] else item["time"]
+            forecast_24h.append({
+                "time": time_str,
+                "aqi": item["aqi"],
+                "status": item["status"]
+            })
 
-        # 2. Group hourly predictions by date to calculate daily averages
+        # Group hourly predictions by date to calculate daily averages and aggregate SHAP values
         days_map = {}
         for item in forecast_list:
-            # Extract date (YYYY-MM-DD) from the time string
-            day_name = item["time"].split(" ")[0] 
+            day_name = item["time"].split(" ")[0]  # YYYY-MM-DD
             if day_name not in days_map:
-                days_map[day_name] = []
-            # Append the AQI value to the list for this specific day
-            days_map[day_name].append(item["aqi"])
+                days_map[day_name] = {
+                    "aqis": [],
+                    "shaps": []
+                }
+            days_map[day_name]["aqis"].append(item["aqi"])
+            if "shap" in item:
+                days_map[day_name]["shaps"].append(item["shap"])
 
-        # 3. Calculate Average AQI and Status for each day
+        # Calculate Average AQI and dynamic SHAP-based explanation for each day
         summaries = []
-        for i, (date, aqi_values) in enumerate(sorted(days_map.items())):
-            # Calculate mean AQI for the day
-            avg = sum(aqi_values) / len(aqi_values)
-            rounded_avg = int(round(avg))
+        for i, (date, metrics) in enumerate(sorted(days_map.items())[:3]):
+            aqis = metrics["aqis"]
+            if not aqis:
+                continue
+            avg_aqi = sum(aqis) / len(aqis)
+            rounded_avg = int(round(avg_aqi))
+            status = get_aqi_status(rounded_avg)
+
+            # Aggregate actual SHAP values for this day
+            avg_shaps = {}
+            if metrics["shaps"]:
+                for feat in metrics["shaps"][0].keys():
+                    feat_vals = [s[feat] for s in metrics["shaps"] if feat in s]
+                    avg_shaps[feat] = sum(feat_vals) / len(feat_vals)
+
+            # Map the top SHAP features of the LightGBM model to friendly descriptions
+            reasons = []
+            if avg_shaps:
+                # Sort features by absolute impact
+                sorted_feats = sorted(avg_shaps.items(), key=lambda x: abs(x[1]), reverse=True)
+                
+                # Take top 2 drivers
+                for feat_name, shap_val in sorted_feats[:2]:
+                    if "lag_1h" in feat_name or "lag_3h" in feat_name or "lag_24h" in feat_name:
+                        reasons.append("pollution carrying over from previous hours")
+                    elif "rolling" in feat_name or "pm2_5" in feat_name or "pm10" in feat_name:
+                        reasons.append("fine dust and particulate matter (PM2.5)")
+                    elif "nitrogen_dioxide" in feat_name:
+                        reasons.append("vehicle exhaust traffic fumes (NO₂)")
+                    elif "sulphur_dioxide" in feat_name:
+                        reasons.append("industrial emissions (SO₂)")
+                    elif "carbon_monoxide" in feat_name:
+                        reasons.append("carbon monoxide levels")
+                    elif "temperature_2m" in feat_name:
+                        reasons.append("ambient temperature variations trapping emissions")
+                    elif "wind_speed_10m" in feat_name:
+                        reasons.append("calm wind patterns keeping pollutants in place")
+
+            if not reasons:
+                reasons.append("stable atmospheric conditions and standard urban emissions")
+
+            explanation = f"Driven mainly by " + " combined with ".join(reasons) + "."
+
             summaries.append({
                 "label": f"Day {i+1}",
                 "date": date,
                 "avg_aqi": rounded_avg,
-                "status": get_aqi_status(rounded_avg),
-                "is_hazardous": bool(rounded_avg > 150)
+                "status": status,
+                "is_hazardous": bool(rounded_avg > 150),
+                "explanation": explanation
             })
 
-        # 4. Return the structured response
+        # 4. Return the simplified structured response with summaries
         return {
             "current": current_aqi,
-            "summaries": summaries,
-            "raw_hourly": forecast_list
+            "forecast_24h": forecast_24h,
+            "summaries": summaries
         }
         
     except Exception as e:
