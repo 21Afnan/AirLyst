@@ -35,10 +35,17 @@ class FeatureStoreClient:
             return False
 
     def upload_data(self, df: pd.DataFrame, group_name: str, version: int = 1):
-        """Creates or updates a feature group, inserts data and returns row counts."""
+        """Creates or updates a feature group, inserts data and returns metrics dict."""
         if self.fs is None:
             logger.error("No active Feature Store connection. Call connect() first.")
-            return 0, 0
+            return {
+                "success": False,
+                "error": "No active Feature Store connection.",
+                "count_before": 0,
+                "count_after": 0,
+                "num_appended": 0,
+                "num_updated": 0
+            }
 
         try:
             logger.info(f"Preparing Feature Group: '{group_name}' (v{version})...")
@@ -53,16 +60,62 @@ class FeatureStoreClient:
                 description="Engineered AQI and Weather features for Islamabad (72h Forecast Pipeline)"
             )
 
-            # 2. Insert Data
+            # 2. Get existing data from the Online Store to calculate metrics
+            count_before = 0
+            existing_times_str = set()
+            try:
+                df_before = aqi_fg.read(online=True)
+                if df_before is not None and not df_before.empty:
+                    count_before = len(df_before)
+                    if 'time' in df_before.columns:
+                        df_before['time'] = pd.to_datetime(df_before['time'])
+                        existing_times_str = set(df_before['time'].dt.strftime('%Y-%m-%d %H:%M:%S'))
+            except Exception as e:
+                logger.warning(f"Could not read existing data for count comparison: {e}. Assuming empty.")
+
+            # 3. Calculate how many rows will be Appended vs Updated
+            incoming_df = df.copy()
+            incoming_df['time'] = pd.to_datetime(incoming_df['time'])
+            incoming_times_str = set(incoming_df['time'].dt.strftime('%Y-%m-%d %H:%M:%S'))
+            
+            num_updated = len([t for t in incoming_times_str if t in existing_times_str])
+            num_appended = len([t for t in incoming_times_str if t not in existing_times_str])
+
+            # 4. Insert Data
             logger.info(f"Inserting {len(df)} records into Feature Store...")
             aqi_fg.insert(df)
-            
             logger.info(f"SUCCESS: Data successfully pushed to '{group_name}'")
-            return 0, len(df)
+            
+            # 5. Get actual count after upload
+            count_after = count_before
+            try:
+                df_after = aqi_fg.read(online=True)
+                if df_after is not None and not df_after.empty:
+                    count_after = len(df_after)
+            except Exception as e:
+                logger.warning(f"Could not read data after upload to verify count: {e}. Estimating.")
+                count_after = count_before + num_appended
+
+            return {
+                "success": True,
+                "count_before": count_before,
+                "count_after": count_after,
+                "num_appended": num_appended,
+                "num_updated": num_updated,
+                "error": None
+            }
             
         except Exception as e:
-            logger.error(f"FAILED to upload data: {str(e)}")
-            return 0, 0
+            error_msg = str(e)
+            logger.error(f"FAILED to upload data: {error_msg}")
+            return {
+                "success": False,
+                "count_before": 0,
+                "count_after": 0,
+                "num_appended": 0,
+                "num_updated": 0,
+                "error": error_msg
+            }
 
     def read_data(self, group_name: str, version: int = 1) -> pd.DataFrame:
         """Reads data from a feature group and returns it as a DataFrame."""

@@ -40,6 +40,7 @@ def run_pipeline():
 
     # 3. Engineer Features
     engineer = FeatureEngineer()
+    raw_len = len(raw_df)
     featured_df = engineer.add_features(raw_df)
     if featured_df.empty:
         logger.error("Pipeline aborted: Feature engineering returned empty dataset.")
@@ -48,34 +49,53 @@ def run_pipeline():
     # Clean duplicates in time
     initial_len = len(featured_df)
     featured_df = featured_df.drop_duplicates(subset=["time"]).sort_values("time").reset_index(drop=True)
-    if len(featured_df) < initial_len:
-        logger.info(f"Dropped {initial_len - len(featured_df)} duplicate rows on time column.")
+    duplicates_dropped = initial_len - len(featured_df)
+    nan_dropped = raw_len - initial_len
+    if duplicates_dropped > 0:
+        logger.info(f"Dropped {duplicates_dropped} duplicate rows on time column.")
 
     # 4. Upload to Hopsworks
     store = FeatureStoreClient()
     logger.info("Connecting to Hopsworks...")
     
-    count_before = 0
-    count_after = 0
-    
     if store.connect():
         logger.info("Uploading data to Hopsworks Feature Group...")
-        count_before, count_after = store.upload_data(featured_df, group_name="aqi_islamabad_feat")
+        metrics = store.upload_data(featured_df, group_name="aqi_islamabad_feat")
     else:
         logger.error("Hopsworks connection failed. ABORTING pipeline to prevent silent failure.")
         sys.exit(1)
 
     # Print summary of pipeline execution
-    print("\n" + "="*65)
+    print("\n" + "="*75)
     print("           [FEATURE PIPELINE EXECUTION SUMMARY]")
-    print("="*65)
+    print("="*75)
     print(f"Data Fetching Window:   {start_date} to {end_date}")
     print(f"Engineered Time Range:  {featured_df['time'].min()} to {featured_df['time'].max()}")
+    print(f"Total Raw Rows Fetched: {raw_len}")
+    print(f"  - Dropped (due to NaNs from Lags/Rolling): {nan_dropped} rows")
+    if duplicates_dropped > 0:
+        print(f"  - Dropped (duplicate timestamps):          {duplicates_dropped} rows")
     print(f"New Rows Engineered:    {len(featured_df)}")
-    print(f"Hopsworks DB Before:    {count_before} rows")
-    print(f"Hopsworks DB After:     {count_after} rows (Total Dataset Size)")
-    print(f"New Unique Rows Added:  {count_after - count_before} rows")
-    print("="*65 + "\n")
+    print("-" * 75)
+    print(f"Hopsworks DB Before:    {metrics['count_before']} rows")
+    print(f"Hopsworks DB After:     {metrics['count_after']} rows")
+    print(f"Appended (New Rows):    {metrics['num_appended']} rows")
+    print(f"Updated (Existing):     {metrics['num_updated']} rows")
+    
+    # Explain status and reasons
+    print("-" * 75)
+    print("Execution Status:")
+    if metrics['success']:
+        print("  [SUCCESS] All records successfully synchronized.")
+        if metrics['num_updated'] > 0:
+            print(f"  * Note: {metrics['num_updated']} rows were updated/overwritten because their")
+            print("    timestamps already existed in Hopsworks (Primary Key check).")
+        if metrics['num_appended'] > 0:
+            print(f"  * Note: {metrics['num_appended']} rows were appended as new time entries.")
+    else:
+        print(f"  [FAILED] Data upload failed.")
+        print(f"  * Reason: {metrics['error']}")
+    print("="*75 + "\n")
 
 if __name__ == "__main__":
     run_pipeline()
