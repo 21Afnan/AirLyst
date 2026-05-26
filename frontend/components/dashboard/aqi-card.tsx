@@ -104,53 +104,58 @@ export function AQICard({ data }: AQICardProps) {
             </div>
 
             {/* Main Pollutants - Animated Cards */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="group/pollutant bg-gradient-to-br from-blue-100/60 to-blue-50/40 dark:from-blue-900/40 dark:to-blue-950/40 hover:from-blue-200/80 hover:to-blue-100/70 dark:hover:from-blue-800/60 dark:hover:to-blue-900/60 rounded-2xl p-4 border border-blue-200/50 dark:border-blue-800/50 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-in">
-                <p className="text-xs font-bold text-blue-900/70 dark:text-blue-200/70 uppercase tracking-wider mb-2">
+            <div className="grid grid-cols-3 gap-3 mt-6">
+              {/* PM2.5 - Indigo/Violet card with neon glow */}
+              <div className="group/pollutant bg-gradient-to-br from-indigo-50/80 to-blue-50/50 dark:from-indigo-950/40 dark:to-blue-950/40 hover:from-indigo-100 hover:to-blue-100/80 dark:hover:from-indigo-900/60 dark:hover:to-blue-900/60 rounded-2xl p-4 border border-indigo-200/50 dark:border-indigo-800/50 backdrop-blur-sm transition-all duration-300 hover:border-indigo-400 dark:hover:border-indigo-600 hover:shadow-[0_0_25px_rgba(99,102,241,0.45)] hover:-translate-y-1 animate-slide-in">
+                <p className="text-xs font-bold text-indigo-900/70 dark:text-indigo-200/70 uppercase tracking-wider mb-2">
                   PM 2.5
                 </p>
-                <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">
+                <p className="text-2xl font-black text-indigo-950 dark:text-indigo-100">
                   {data.pm25.toFixed(1)}
                 </p>
-                <p className="text-xs text-blue-700/60 dark:text-blue-300/60 mt-1">μg/m³</p>
+                <p className="text-xs text-indigo-700/60 dark:text-indigo-300/60 mt-1">μg/m³</p>
               </div>
 
-              <div className="group/pollutant bg-gradient-to-br from-cyan-100/60 to-cyan-50/40 dark:from-cyan-900/40 dark:to-cyan-950/40 hover:from-cyan-200/80 hover:to-cyan-100/70 dark:hover:from-cyan-800/60 dark:hover:to-cyan-900/60 rounded-2xl p-4 border border-cyan-200/50 dark:border-cyan-800/50 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-in"
+              {/* PM10 - Cyan/Teal card with neon glow */}
+              <div className="group/pollutant bg-gradient-to-br from-cyan-50/80 to-teal-50/50 dark:from-cyan-950/40 dark:to-teal-950/40 hover:from-cyan-100 hover:to-teal-100/80 dark:hover:from-cyan-900/60 dark:hover:to-teal-900/60 rounded-2xl p-4 border border-cyan-200/50 dark:border-cyan-800/50 backdrop-blur-sm transition-all duration-300 hover:border-cyan-400 dark:hover:border-cyan-600 hover:shadow-[0_0_25px_rgba(6,182,212,0.45)] hover:-translate-y-1 animate-slide-in"
                 style={{ animationDelay: '0.1s' }}>
                 <p className="text-xs font-bold text-cyan-900/70 dark:text-cyan-200/70 uppercase tracking-wider mb-2">
                   PM 10
                 </p>
-                <p className="text-2xl font-bold text-cyan-900 dark:text-cyan-100">
+                <p className="text-2xl font-black text-cyan-950 dark:text-cyan-100">
                   {data.pm10.toFixed(1)}
                 </p>
                 <p className="text-xs text-cyan-700/60 dark:text-cyan-300/60 mt-1">μg/m³</p>
               </div>
 
-              <div className="group/pollutant bg-gradient-to-br from-teal-100/60 to-teal-50/40 dark:from-teal-900/40 dark:to-teal-950/40 hover:from-teal-200/80 hover:to-teal-100/70 dark:hover:from-teal-800/60 dark:hover:to-teal-900/60 rounded-2xl p-4 border border-teal-200/50 dark:border-teal-800/50 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-in"
+              {/* NO2 - Emerald/Teal card with neon glow */}
+              <div className="group/pollutant bg-gradient-to-br from-emerald-50/80 to-teal-50/50 dark:from-emerald-950/40 dark:to-teal-950/40 hover:from-emerald-100 hover:to-teal-100/80 dark:hover:from-emerald-900/60 dark:hover:to-teal-900/60 rounded-2xl p-4 border border-emerald-200/50 dark:border-emerald-800/50 backdrop-blur-sm transition-all duration-300 hover:border-emerald-400 dark:hover:border-emerald-600 hover:shadow-[0_0_25px_rgba(16,185,129,0.45)] hover:-translate-y-1 animate-slide-in"
                 style={{ animationDelay: '0.2s' }}>
-                <p className="text-xs font-bold text-teal-900/70 dark:text-teal-200/70 uppercase tracking-wider mb-2">
+                <p className="text-xs font-bold text-emerald-900/70 dark:text-emerald-200/70 uppercase tracking-wider mb-2">
                   NO₂
                 </p>
-                <p className="text-2xl font-bold text-teal-900 dark:text-teal-100">
+                <p className="text-2xl font-black text-emerald-950 dark:text-emerald-100">
                   {data.no2.toFixed(1)}
                 </p>
-                <p className="text-xs text-teal-700/60 dark:text-teal-300/60 mt-1">ppb</p>
+                <p className="text-xs text-emerald-700/60 dark:text-emerald-300/60 mt-1">ppb</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Additional Pollutants */}
-        <div className="grid grid-cols-2 gap-3 mb-6 py-6 border-t border-b border-cyan-200/30 dark:border-cyan-900/30">
-          <div className="group/mini bg-gradient-to-br from-cyan-50/60 to-cyan-50/30 dark:from-cyan-950/40 dark:to-cyan-950/20 rounded-xl p-3 border border-cyan-100/50 dark:border-cyan-900/40 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md">
-            <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">SO₂</p>
-            <p className="text-lg font-bold text-slate-900 dark:text-white">{data.so2.toFixed(1)}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">ppb</p>
+        {/* Additional Pollutants with Custom Glows */}
+        <div className="grid grid-cols-2 gap-4 mb-6 py-6 border-t border-b border-cyan-200/30 dark:border-cyan-900/30">
+          {/* SO2 - Purple/Pink card */}
+          <div className="group/mini bg-gradient-to-br from-purple-50/90 to-pink-50/50 dark:from-purple-950/40 dark:to-pink-950/30 rounded-xl p-4 border border-purple-200/40 dark:border-purple-800/40 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:border-purple-400 dark:hover:border-purple-700 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+            <p className="text-xs font-bold text-purple-900/80 dark:text-purple-300/80 mb-1">SO₂</p>
+            <p className="text-xl font-extrabold text-purple-950 dark:text-purple-100">{data.so2.toFixed(1)}</p>
+            <p className="text-xs text-purple-700/60 dark:text-purple-400/60 mt-0.5">ppb</p>
           </div>
-          <div className="group/mini bg-gradient-to-br from-teal-50/60 to-teal-50/30 dark:from-teal-950/40 dark:to-teal-950/20 rounded-xl p-3 border border-teal-100/50 dark:border-teal-900/40 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md">
-            <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">CO</p>
-            <p className="text-lg font-bold text-slate-900 dark:text-white">{data.co.toFixed(2)}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">ppm</p>
+          {/* CO - Amber/Orange card */}
+          <div className="group/mini bg-gradient-to-br from-amber-50/90 to-orange-50/50 dark:from-amber-950/40 dark:to-orange-950/30 rounded-xl p-4 border border-amber-200/40 dark:border-amber-800/40 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:border-amber-400 dark:hover:border-amber-700 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+            <p className="text-xs font-bold text-amber-900/80 dark:text-amber-300/80 mb-1">CO</p>
+            <p className="text-xl font-extrabold text-amber-950 dark:text-amber-100">{data.co.toFixed(2)}</p>
+            <p className="text-xs text-amber-700/60 dark:text-amber-400/60 mt-0.5">ppm</p>
           </div>
         </div>
 

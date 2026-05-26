@@ -43,22 +43,22 @@ export function WeatherWidget({ data }: WeatherWidgetProps) {
         {/* Weather Details Grid */}
         <div className="grid grid-cols-2 gap-3 w-full mt-2">
           {/* Pressure */}
-          <div className="group bg-gradient-to-br from-cyan-100/50 to-cyan-50/30 dark:from-cyan-900/40 dark:to-cyan-950/30 hover:from-cyan-150/70 hover:to-cyan-100/50 dark:hover:from-cyan-800/60 dark:hover:to-cyan-900/60 rounded-xl p-4 border border-cyan-200/40 dark:border-cyan-800/40 transition-all hover:shadow-lg hover:-translate-y-1 cursor-default">
-            <p className="text-xs font-bold text-cyan-900/70 dark:text-cyan-200/70 uppercase tracking-wider mb-2">
+          <div className="group bg-gradient-to-br from-blue-50/90 to-cyan-50/50 dark:from-blue-950/40 dark:to-cyan-950/30 hover:from-blue-100 hover:to-cyan-100/80 dark:hover:from-blue-900/60 dark:hover:to-cyan-900/60 rounded-2xl p-4 border border-blue-200/50 dark:border-cyan-800/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] hover:-translate-y-1 cursor-default">
+            <p className="text-xs font-bold text-blue-900/70 dark:text-blue-200/70 uppercase tracking-wider mb-2">
               Pressure
             </p>
-            <p className="text-2xl font-bold text-cyan-900 dark:text-cyan-100">
-              {data.pressure}<span className="text-sm">mb</span>
+            <p className="text-2xl font-black text-blue-950 dark:text-blue-100">
+              {data.pressure}<span className="text-xs font-bold ml-0.5 text-blue-700/70 dark:text-blue-400/70">mb</span>
             </p>
           </div>
 
           {/* Wind Speed */}
-          <div className="group bg-gradient-to-br from-teal-100/50 to-teal-50/30 dark:from-teal-900/40 dark:to-teal-950/30 hover:from-teal-150/70 hover:to-teal-100/50 dark:hover:from-teal-800/60 dark:hover:to-teal-900/60 rounded-xl p-4 border border-teal-200/40 dark:border-teal-800/40 transition-all hover:shadow-lg hover:-translate-y-1 cursor-default">
+          <div className="group bg-gradient-to-br from-teal-50/90 to-emerald-50/50 dark:from-teal-950/40 dark:to-emerald-950/30 hover:from-teal-100 hover:to-emerald-100/80 dark:hover:from-teal-900/60 dark:hover:to-emerald-900/60 rounded-2xl p-4 border border-teal-200/50 dark:border-teal-800/40 transition-all duration-300 hover:shadow-[0_0_20px_rgba(20,184,166,0.4)] hover:-translate-y-1 cursor-default">
             <p className="text-xs font-bold text-teal-900/70 dark:text-teal-200/70 uppercase tracking-wider mb-2">
               Wind Speed
             </p>
-            <p className="text-2xl font-bold text-teal-900 dark:text-teal-100">
-              {data.windSpeed}<span className="text-sm">mph</span>
+            <p className="text-2xl font-black text-teal-950 dark:text-teal-100">
+              {data.windSpeed}<span className="text-xs font-bold ml-0.5 text-teal-700/70 dark:text-teal-400/70">mph</span>
             </p>
           </div>
         </div>

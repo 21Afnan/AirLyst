@@ -2,63 +2,45 @@ export function AirLystLogo({ className = "w-8 h-8" }: { className?: string }) {
   return (
     <svg viewBox="0 0 64 64" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="logoGradMain" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6" />
-          <stop offset="50%" stopColor="#06b6d4" />
-          <stop offset="100%" stopColor="#10b981" />
+        {/* Main Blue to Green Gradient */}
+        <linearGradient id="logoGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#0072db" />
+          <stop offset="50%" stopColor="#00b4d8" />
+          <stop offset="100%" stopColor="#00c9a7" />
         </linearGradient>
-        <filter id="logoGlow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2" result="blur" />
+        {/* Soft Shadow for Glowing effect */}
+        <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
           <feComposite in="SourceGraphic" in2="blur" operator="over" />
         </filter>
       </defs>
 
-      {/* Outer Glowing Ring representing AQI forecast range */}
-      <circle 
-        cx="32" 
-        cy="32" 
-        r="25" 
-        stroke="url(#logoGradMain)" 
-        strokeWidth="3.5" 
-        strokeDasharray="110 30" 
-        strokeLinecap="round" 
-        filter="url(#logoGlow)" 
-        className="animate-spin-slow"
-        transform="rotate(-45 32 32)"
+      {/* Main Outer Open Circle Ring (Blue to Green Gradient) */}
+      <path
+        d="M 46 18 A 20 20 0 1 1 48 32"
+        stroke="url(#logoGrad)"
+        strokeWidth="4"
+        strokeLinecap="round"
+        filter="url(#softGlow)"
       />
-      
-      {/* Sleek wind trace 1 */}
-      <path 
-        d="M 18 25 C 28 20, 36 34, 46 27" 
-        stroke="white" 
-        strokeWidth="3" 
-        strokeLinecap="round" 
+
+      {/* Inner Wave Shape */}
+      <path
+        d="M 22 36 C 28 32, 34 40, 42 36"
+        stroke="url(#logoGrad)"
+        strokeWidth="3.5"
+        strokeLinecap="round"
         fill="none"
-        filter="url(#logoGlow)"
+        filter="url(#softGlow)"
       />
-      {/* Sleek wind trace 2 */}
-      <path 
-        d="M 15 33 C 24 30, 34 38, 48 33" 
-        stroke="url(#logoGradMain)" 
-        strokeWidth="3" 
-        strokeLinecap="round" 
-        fill="none"
-      />
-      {/* Sleek wind trace 3 */}
-      <path 
-        d="M 18 41 C 28 41, 38 34, 46 39" 
-        stroke="white" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        fill="none"
-        opacity="0.8"
-      />
-      
-      {/* Spark/Star of Prediction */}
-      <path 
-        d="M 44 19 L 46 22 L 49 24 L 46 26 L 44 29 L 42 26 L 39 24 L 42 22 Z" 
-        fill="url(#logoGradMain)"
-        filter="url(#logoGlow)"
+
+      {/* Spark/Plus at Top Right */}
+      <path
+        d="M 45 13 L 49 13 M 47 11 L 47 15"
+        stroke="#00c9a7"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        filter="url(#softGlow)"
         className="animate-pulse"
       />
     </svg>
