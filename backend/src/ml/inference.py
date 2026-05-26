@@ -23,6 +23,9 @@ logger = get_logger("Inference")
 # 1. DATA FETCHING (past 2 days + next 3 days = context + future)
 # ──────────────────────────────────────────────────────────────
 
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 def fetch_forecast_weather() -> pd.DataFrame:
     """Fetches weather data: past 2 days (for lags) + next 3 days (forecast)."""
     params = {
@@ -34,7 +37,8 @@ def fetch_forecast_weather() -> pd.DataFrame:
         "timezone": "auto"
     }
     try:
-        resp = requests.get(settings.FORECAST_URL, params=params, timeout=15)
+        # verify=False handles local certificate mismatch or proxy issues on developer systems
+        resp = requests.get(settings.FORECAST_URL, params=params, timeout=15, verify=False)
         resp.raise_for_status()
         df = pd.DataFrame(resp.json().get("hourly", {}))
         df["time"] = pd.to_datetime(df["time"])
@@ -56,7 +60,8 @@ def fetch_forecast_air_quality() -> pd.DataFrame:
         "timezone": "auto"
     }
     try:
-        resp = requests.get(settings.AIR_URL, params=params, timeout=15)
+        # verify=False handles local certificate mismatch or proxy issues on developer systems
+        resp = requests.get(settings.AIR_URL, params=params, timeout=15, verify=False)
         resp.raise_for_status()
         df = pd.DataFrame(resp.json().get("hourly", {}))
         df["time"] = pd.to_datetime(df["time"])
@@ -86,7 +91,7 @@ def load_model_and_scaler():
 # 4. MAIN INFERENCE FUNCTION
 # ──────────────────────────────────────────────────────────────
 
-def run_inference() -> list[dict]:
+def run_inference() -> dict:
     """
     End-to-end inference pipeline:
     1. Fetch weather + air quality forecast (past 2 days + next 3 days)
@@ -94,7 +99,7 @@ def run_inference() -> list[dict]:
     3. Run FeatureEngineer (reuse existing module, no redundancy)
     4. Filter to only FUTURE hours (after now)
     5. Scale + Predict using saved model
-    6. Return clean list of predictions
+    6. Return clean dictionary of current and forecast predictions
     """
     logger.info("Starting inference pipeline...")
 
@@ -104,7 +109,7 @@ def run_inference() -> list[dict]:
 
     if weather_df.empty or aqi_df.empty:
         logger.error("Inference aborted: could not fetch forecast data.")
-        return []
+        return {"current": None, "forecast": []}
 
     # Step 2: Merge on time, deduplicate, sort
     merged_df = pd.merge(weather_df, aqi_df, on="time", how="inner")
@@ -116,7 +121,7 @@ def run_inference() -> list[dict]:
     featured_df = engineer.add_features(merged_df)
     if featured_df.empty:
         logger.error("Inference aborted: feature engineering returned empty dataframe.")
-        return []
+        return {"current": None, "forecast": []}
 
     # Step 4: Separate CURRENT vs FUTURE rows
     now = pd.Timestamp.now().floor('H')  # Round down to the nearest hour
