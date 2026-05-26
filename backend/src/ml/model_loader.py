@@ -19,8 +19,13 @@ def load_model_and_scaler():
     """
     try:
         import hopsworks
+        from src.utils.config import settings
         logger.info("Connecting to Hopsworks Model Registry...")
-        project = hopsworks.login()
+        project = hopsworks.login(
+            host=settings.HOPSWORKS_HOST,
+            project=settings.HOPSWORKS_PROJECT,
+            api_key_value=settings.HOPSWORKS_KEY
+        )
         mr = project.get_model_registry()
 
         logger.info("Downloading latest 'aqi_forecast_model' from registry...")
