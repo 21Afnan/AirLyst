@@ -14,10 +14,10 @@ export function Navigation() {
               <AirLystLogo className="w-5 h-5 md:w-6 md:h-6 text-blue-600 dark:text-cyan-400 transition-transform group-hover:scale-110" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-base md:text-lg font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
+              <h1 className="text-base md:text-xl font-black bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 dark:from-cyan-400 dark:via-blue-400 dark:to-emerald-400 bg-clip-text text-transparent hover:scale-105 transition-transform duration-300">
                 AirLyst
               </h1>
-              <p className="text-xs text-gray-600 dark:text-gray-400">Air Quality</p>
+              <p className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 tracking-wide">Predicting Air Quality AQI of Islamabad</p>
             </div>
           </Link>
 

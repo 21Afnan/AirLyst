@@ -74,12 +74,17 @@ export function AQICard({ data }: AQICardProps) {
             
             {/* Center content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-5xl font-bold font-mono" style={{ color }}>
+              <span className="text-5xl font-black font-mono" style={{ color }}>
                 {data.aqi}
               </span>
-              <span className="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-2">
-                AQI Index
+              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5 uppercase tracking-wider">
+                Predicted
               </span>
+              {data.actual_aqi !== undefined && (
+                <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-1">
+                  Actual: <span className="font-bold">{data.actual_aqi}</span>
+                </span>
+              )}
             </div>
           </div>
 
@@ -124,10 +129,10 @@ export function AQICard({ data }: AQICardProps) {
               <div className="group/pollutant bg-gradient-to-br from-teal-100/60 to-teal-50/40 dark:from-teal-900/40 dark:to-teal-950/40 hover:from-teal-200/80 hover:to-teal-100/70 dark:hover:from-teal-800/60 dark:hover:to-teal-900/60 rounded-2xl p-4 border border-teal-200/50 dark:border-teal-800/50 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-in"
                 style={{ animationDelay: '0.2s' }}>
                 <p className="text-xs font-bold text-teal-900/70 dark:text-teal-200/70 uppercase tracking-wider mb-2">
-                  O₃
+                  NO₂
                 </p>
                 <p className="text-2xl font-bold text-teal-900 dark:text-teal-100">
-                  {data.o3.toFixed(1)}
+                  {data.no2.toFixed(1)}
                 </p>
                 <p className="text-xs text-teal-700/60 dark:text-teal-300/60 mt-1">ppb</p>
               </div>
@@ -136,12 +141,7 @@ export function AQICard({ data }: AQICardProps) {
         </div>
 
         {/* Additional Pollutants */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 py-6 border-t border-b border-cyan-200/30 dark:border-cyan-900/30">
-          <div className="group/mini bg-gradient-to-br from-blue-50/60 to-blue-50/30 dark:from-blue-950/40 dark:to-blue-950/20 rounded-xl p-3 border border-blue-100/50 dark:border-blue-900/40 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md">
-            <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">NO₂</p>
-            <p className="text-lg font-bold text-slate-900 dark:text-white">{data.no2.toFixed(1)}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">ppb</p>
-          </div>
+        <div className="grid grid-cols-2 gap-3 mb-6 py-6 border-t border-b border-cyan-200/30 dark:border-cyan-900/30">
           <div className="group/mini bg-gradient-to-br from-cyan-50/60 to-cyan-50/30 dark:from-cyan-950/40 dark:to-cyan-950/20 rounded-xl p-3 border border-cyan-100/50 dark:border-cyan-900/40 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md">
             <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">SO₂</p>
             <p className="text-lg font-bold text-slate-900 dark:text-white">{data.so2.toFixed(1)}</p>
@@ -151,11 +151,6 @@ export function AQICard({ data }: AQICardProps) {
             <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">CO</p>
             <p className="text-lg font-bold text-slate-900 dark:text-white">{data.co.toFixed(2)}</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">ppm</p>
-          </div>
-          <div className="group/mini bg-gradient-to-br from-sky-50/60 to-sky-50/30 dark:from-sky-950/40 dark:to-sky-950/20 rounded-xl p-3 border border-sky-100/50 dark:border-sky-900/40 transition-all hover:scale-105 hover:-translate-y-1 hover:shadow-md">
-            <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Pressure</p>
-            <p className="text-lg font-bold text-slate-900 dark:text-white">1013</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">hPa</p>
           </div>
         </div>
 

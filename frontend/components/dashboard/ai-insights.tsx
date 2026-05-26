@@ -1,11 +1,11 @@
 'use client';
 
-import { AirQualityData, HourlyAQI } from '@/lib/api/types';
+import { AirQualityData, AQITrendData } from '@/lib/api/types';
 import { Lightbulb, AlertTriangle, CheckCircle } from 'lucide-react';
 
 interface AIInsightsProps {
   currentAQI: AirQualityData;
-  hourlyTrend: HourlyAQI[];
+  hourlyTrend: AQITrendData[];
 }
 
 /**
@@ -65,7 +65,7 @@ export function AIInsights({ currentAQI, hourlyTrend }: AIInsightsProps) {
 
   // Generate AI recommendations based on trend
   const generateRecommendations = () => {
-    const recentTrend = hourlyTrend.slice(-6).map(h => h.aqi);
+    const recentTrend = hourlyTrend.slice(-6).map(h => h.predicted_aqi);
     const isImproving = recentTrend[recentTrend.length - 1] < recentTrend[0];
     const avgAQI = Math.round(recentTrend.reduce((a, b) => a + b, 0) / recentTrend.length);
     
@@ -113,9 +113,9 @@ export function AIInsights({ currentAQI, hourlyTrend }: AIInsightsProps) {
   return (
     <div className="space-y-4">
       {/* Root Cause Analysis */}
-      <div className={`bg-gradient-to-r ${severityColors[rootCause.severity]} rounded-xl p-5 md:p-6 border animate-slide-in`}>
+      <div className={`bg-gradient-to-r ${severityColors[rootCause.severity as 'high' | 'medium' | 'low']} rounded-xl p-5 md:p-6 border animate-slide-in`}>
         <div className="flex items-start gap-4">
-          <div className={`p-3 rounded-lg ${iconColors[rootCause.severity]} flex-shrink-0`}>
+          <div className={`p-3 rounded-lg ${iconColors[rootCause.severity as 'high' | 'medium' | 'low']} flex-shrink-0`}>
             <RootCauseIcon className="w-6 h-6" />
           </div>
           <div className="flex-1">

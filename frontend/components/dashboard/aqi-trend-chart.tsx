@@ -27,11 +27,23 @@ export function AQITrendChart({ data }: AQITrendChartProps) {
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="mb-8">
-          <h3 className="text-sm font-bold text-blue-900 dark:text-blue-100 uppercase tracking-wider">
-            24-Hour Prediction Trend
-          </h3>
-          <p className="text-xs text-blue-600/70 dark:text-blue-300/60 mt-1">LightGBM model predictions for the next 24 hours</p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h3 className="text-sm font-bold text-blue-900 dark:text-blue-100 uppercase tracking-wider">
+              24-Hour Actual vs Predicted AQI
+            </h3>
+            <p className="text-xs text-blue-600/70 dark:text-blue-300/60 mt-1">Comparing Open-Meteo observations with our ML model forecast</p>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-semibold">
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-6 h-0.5 border-t-2 border-blue-500"></span>
+              <span className="text-slate-600 dark:text-slate-300">Model Predicted</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-6 h-0.5 border-t-2 border-dashed border-lime-500"></span>
+              <span className="text-slate-600 dark:text-slate-300">Actual (Open-Meteo)</span>
+            </div>
+          </div>
         </div>
 
         {/* Chart */}
@@ -80,11 +92,11 @@ export function AQITrendChart({ data }: AQITrendChartProps) {
                   color: '#e0f2fe',
                   boxShadow: '0 8px 32px rgba(2, 136, 209, 0.2)',
                 }}
-                formatter={(value) => [
-                  <span key="aqi" className="font-semibold text-cyan-300">
+                formatter={(value, name) => [
+                  <span key={String(name)} className="font-semibold text-cyan-300">
                     {value} AQI
                   </span>,
-                  'Quality',
+                  name === 'predicted_aqi' ? 'Predicted AQI' : 'Actual (Open-Meteo)',
                 ]}
                 labelFormatter={(label) => (
                   <span className="text-blue-200">{`Time: ${label}`}</span>
@@ -136,22 +148,37 @@ export function AQITrendChart({ data }: AQITrendChartProps) {
                 }}
               />
 
-              {/* Main Line */}
+              {/* Predicted AQI Line */}
               <Line
                 type="monotone"
-                dataKey="aqi"
+                dataKey="predicted_aqi"
+                name="predicted_aqi"
                 stroke="#0288d1"
                 strokeWidth={3}
                 dot={{ fill: '#0288d1', r: 3, opacity: 0.7 }}
                 activeDot={{
                   r: 7,
                   fill: '#0288d1',
-                  shadow: '0 0 15px rgba(2, 136, 209, 0.6)',
                 }}
                 isAnimationActive={true}
                 animationDuration={1500}
-                fillOpacity={1}
-                fill="url(#colorAqi)"
+              />
+
+              {/* Actual AQI Line */}
+              <Line
+                type="monotone"
+                dataKey="actual_aqi"
+                name="actual_aqi"
+                stroke="#84cc16"
+                strokeWidth={2}
+                strokeDasharray="4 4"
+                dot={{ fill: '#84cc16', r: 2, opacity: 0.7 }}
+                activeDot={{
+                  r: 5,
+                  fill: '#84cc16',
+                }}
+                isAnimationActive={true}
+                animationDuration={1500}
               />
             </LineChart>
           </ResponsiveContainer>

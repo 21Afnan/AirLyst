@@ -37,7 +37,8 @@ def get_forecast():
             time_str = item["time"].split(" ")[1] if " " in item["time"] else item["time"]
             forecast_24h.append({
                 "time": time_str,
-                "aqi": item["aqi"],
+                "predicted_aqi": item["aqi"],
+                "actual_aqi": item.get("open_meteo_aqi", item["aqi"]),
                 "status": item["status"]
             })
 
@@ -80,19 +81,19 @@ def get_forecast():
                 # Take top 2 drivers
                 for feat_name, shap_val in sorted_feats[:2]:
                     if "lag_1h" in feat_name or "lag_3h" in feat_name or "lag_24h" in feat_name:
-                        reasons.append("pollution carrying over from previous hours")
+                        reasons.append("pollution already floating in the air from previous hours")
                     elif "rolling" in feat_name or "pm2_5" in feat_name or "pm10" in feat_name:
-                        reasons.append("fine dust and particulate matter (PM2.5)")
+                        reasons.append("soot and dust particles suspended in the atmosphere")
                     elif "nitrogen_dioxide" in feat_name:
-                        reasons.append("vehicle exhaust traffic fumes (NO₂)")
+                        reasons.append("smoke and exhaust fumes from traffic traffic")
                     elif "sulphur_dioxide" in feat_name:
-                        reasons.append("industrial emissions (SO₂)")
+                        reasons.append("harmful gases emitted from local industries")
                     elif "carbon_monoxide" in feat_name:
-                        reasons.append("carbon monoxide levels")
+                        reasons.append("carbon monoxide gas from burning fuels")
                     elif "temperature_2m" in feat_name:
-                        reasons.append("ambient temperature variations trapping emissions")
+                        reasons.append("warm weather trapping dirty air near the ground")
                     elif "wind_speed_10m" in feat_name:
-                        reasons.append("calm wind patterns keeping pollutants in place")
+                        reasons.append("still winds that fail to blow away the dust")
 
             if not reasons:
                 reasons.append("stable atmospheric conditions and standard urban emissions")

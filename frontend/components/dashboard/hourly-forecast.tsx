@@ -31,7 +31,7 @@ export function HourlyForecast({ data }: HourlyForecastProps) {
         <div className="overflow-x-auto pb-4 scrollbar-hide">
           <div className="flex gap-3 min-w-min">
             {displayData.map((item, index) => {
-              const color = getAQIColor(item.aqi);
+              const color = getAQIColor(item.predicted_aqi);
               const isHighlight = index === displayData.length - 1;
 
               return (
@@ -62,19 +62,19 @@ export function HourlyForecast({ data }: HourlyForecastProps) {
                         boxShadow: `0 4px 16px ${color}40`,
                       }}
                     >
-                      <span className="text-lg">{item.aqi}</span>
+                      <span className="text-lg">{item.predicted_aqi}</span>
                     </div>
                   </div>
 
                   {/* Status indicator */}
                   <div className="text-center">
                     <p className={`text-xs font-semibold ${
-                      item.aqi <= 50 ? 'text-green-600 dark:text-green-400' :
-                      item.aqi <= 100 ? 'text-yellow-600 dark:text-yellow-400' :
-                      item.aqi <= 150 ? 'text-orange-600 dark:text-orange-400' :
+                      item.predicted_aqi <= 50 ? 'text-green-600 dark:text-green-400' :
+                      item.predicted_aqi <= 100 ? 'text-yellow-600 dark:text-yellow-400' :
+                      item.predicted_aqi <= 150 ? 'text-orange-600 dark:text-orange-400' :
                       'text-red-600 dark:text-red-400'
                     }`}>
-                      {item.aqi <= 50 ? 'Good' : item.aqi <= 100 ? 'Fair' : item.aqi <= 150 ? 'Moderate' : 'Poor'}
+                      {item.predicted_aqi <= 50 ? 'Good' : item.predicted_aqi <= 100 ? 'Fair' : item.predicted_aqi <= 150 ? 'Moderate' : 'Poor'}
                     </p>
                   </div>
                 </div>

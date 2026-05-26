@@ -30,9 +30,9 @@ export function Forecast({ data }: ForecastProps) {
   const days = ['Today', 'Tomorrow', 'Day 3'];
   const dayData = days.map((day) => {
     const items = dayGroups[day] || [];
-    const avgAQI = items.length > 0 ? Math.round(items.reduce((sum, item) => sum + item.aqi, 0) / items.length) : 0;
-    const minAQI = items.length > 0 ? Math.min(...items.map((item) => item.aqi)) : 0;
-    const maxAQI = items.length > 0 ? Math.max(...items.map((item) => item.aqi)) : 0;
+    const avgAQI = items.length > 0 ? Math.round(items.reduce((sum, item) => sum + item.predicted_aqi, 0) / items.length) : 0;
+    const minAQI = items.length > 0 ? Math.min(...items.map((item) => item.predicted_aqi)) : 0;
+    const maxAQI = items.length > 0 ? Math.max(...items.map((item) => item.predicted_aqi)) : 0;
     return { day, avgAQI, minAQI, maxAQI, items };
   });
 
@@ -122,11 +122,11 @@ export function Forecast({ data }: ForecastProps) {
                       key={idx}
                       className="flex-1 rounded-t transition-all hover:scale-110"
                       style={{
-                        height: `${(item.aqi / Math.max(...dayInfo.items.map((i) => i.aqi))) * 100}%`,
-                        backgroundColor: getAQIColor(item.aqi),
+                        height: `${(item.predicted_aqi / Math.max(...dayInfo.items.map((i) => i.predicted_aqi))) * 100}%`,
+                        backgroundColor: getAQIColor(item.predicted_aqi),
                         opacity: 0.7,
                       }}
-                      title={`${item.time}: AQI ${item.aqi}`}
+                      title={`${item.time}: AQI ${item.predicted_aqi}`}
                     />
                   ))}
                 </div>

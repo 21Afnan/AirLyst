@@ -42,16 +42,6 @@ export function WeatherWidget({ data }: WeatherWidgetProps) {
 
         {/* Weather Details Grid */}
         <div className="grid grid-cols-2 gap-3 w-full mt-2">
-          {/* Humidity */}
-          <div className="group bg-gradient-to-br from-blue-100/50 to-blue-50/30 dark:from-blue-900/40 dark:to-blue-950/30 hover:from-blue-150/70 hover:to-blue-100/50 dark:hover:from-blue-800/60 dark:hover:to-blue-900/60 rounded-xl p-4 border border-blue-200/40 dark:border-blue-800/40 transition-all hover:shadow-lg hover:-translate-y-1 cursor-default">
-            <p className="text-xs font-bold text-blue-900/70 dark:text-blue-200/70 uppercase tracking-wider mb-2">
-              Humidity
-            </p>
-            <p className="text-2xl font-bold text-blue-900 dark:text-blue-100">
-              {data.humidity}<span className="text-lg">%</span>
-            </p>
-          </div>
-
           {/* Pressure */}
           <div className="group bg-gradient-to-br from-cyan-100/50 to-cyan-50/30 dark:from-cyan-900/40 dark:to-cyan-950/30 hover:from-cyan-150/70 hover:to-cyan-100/50 dark:hover:from-cyan-800/60 dark:hover:to-cyan-900/60 rounded-xl p-4 border border-cyan-200/40 dark:border-cyan-800/40 transition-all hover:shadow-lg hover:-translate-y-1 cursor-default">
             <p className="text-xs font-bold text-cyan-900/70 dark:text-cyan-200/70 uppercase tracking-wider mb-2">
@@ -69,16 +59,6 @@ export function WeatherWidget({ data }: WeatherWidgetProps) {
             </p>
             <p className="text-2xl font-bold text-teal-900 dark:text-teal-100">
               {data.windSpeed}<span className="text-sm">mph</span>
-            </p>
-          </div>
-
-          {/* Direction */}
-          <div className="group bg-gradient-to-br from-sky-100/50 to-sky-50/30 dark:from-sky-900/40 dark:to-sky-950/30 hover:from-sky-150/70 hover:to-sky-100/50 dark:hover:from-sky-800/60 dark:hover:to-sky-900/60 rounded-xl p-4 border border-sky-200/40 dark:border-sky-800/40 transition-all hover:shadow-lg hover:-translate-y-1 cursor-default">
-            <p className="text-xs font-bold text-sky-900/70 dark:text-sky-200/70 uppercase tracking-wider mb-2">
-              Direction
-            </p>
-            <p className="text-2xl font-bold text-sky-900 dark:text-sky-100">
-              {data.windDirection}<span className="text-sm">°</span>
             </p>
           </div>
         </div>
