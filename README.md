@@ -91,19 +91,19 @@ Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboa
   <table>
     <tr>
       <td width="33.3%" align="center">
-        <img src="backend/dashbaord-images/AeroVibe%20Main%20Dashboard.png" alt="AeroVibe Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
+        <img src="assets/ssfg/AeroVibe%20Main%20Dashboard.png" alt="AeroVibe Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
         <br />
         <b>1. Main Dashboard View</b>
         <p><i>Real-time AQI dials, weather metrics, and daily predictions.</i></p>
       </td>
       <td width="33.3%" align="center">
-        <img src="backend/dashbaord-images/AI%20Explanations%20&amp;%20SHAP%20Insights.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
+        <img src="assets/ssfg/AI%20Explanations%20&amp;%20SHAP%20Insights.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
         <br />
         <b>2. AI SHAP Insights</b>
         <p><i>Local Shapley explanations translating variables to human language.</i></p>
       </td>
       <td width="33.3%" align="center">
-        <img src="backend/dashbaord-images/Hourly%20Predictions%20Chart.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
+        <img src="assets/ssfg/Hourly%20Predictions%20Chart.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
         <br />
         <b>3. Hourly Trends Chart</b>
         <p><i>EPA-banded 24-hour predictive line chart with tooltips.</i></p>
