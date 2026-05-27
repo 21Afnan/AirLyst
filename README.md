@@ -24,6 +24,53 @@
 
 ---
 
+## 📖 Executive Summary
+
+The **AirLyst** project is a production-grade MLOps (Machine Learning Operations) system designed to provide 72-hour predictive insights into urban air quality. Unlike standard weather apps that offer only current observations, AirLyst leverages advanced regression models and real-time data pipelines to forecast pollution trends, helping users make informed decisions about their respiratory health. It features an automated data ingestion pipeline, cloud-based feature storage, a machine learning training tournament, explainable AI (SHAP), generative AI translations, and a high-performance web dashboard.
+
+---
+
+## ✨ Key Project Features
+
+*   **72-Hour Predictions**: Hourly granularity for the next 3 days.
+*   **AI-Powered Insights**: Real-time explanations of pollution drivers utilizing SHAP and Gemini 2.0 Flash.
+*   **Professional Dashboard**: Includes interactive charts, EPA-standard color coding, and responsive design for mobile.
+*   **Automated Pipeline**: The system is designed to update its data and predictions daily with zero manual effort.
+*   **Model Tournament**: Retrains weekly. Competes Ridge, Random Forest, XGBoost, and LightGBM models using custom chronological time-series splitting to avoid future data leakage.
+
+---
+
+## 📷 Interactive Dashboard Showcase
+
+Here is a visual walk-through of the premium **AirLyst Next.js Frontend Dashboard** showing real-time observations, 72-hour forecast charts, and local AI explanation widgets:
+
+<div align="center">
+  <table>
+    <tr>
+      <td width="33.3%" align="center">
+        <img src="assets/ssfg/AeroVibe%20Main%20Dashboard.png" alt="AirLyst Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
+        <br />
+        <b>1. Main Dashboard View</b>
+        <p><i>Real-time AQI dials, weather metrics, and daily predictions.</i></p>
+      </td>
+      <td width="33.3%" align="center">
+        <img src="assets/ssfg/AI%20Explanations%20&amp;%20SHAP%20Insights.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
+        <br />
+        <b>2. AI SHAP Insights</b>
+        <p><i>Local Shapley explanations translating variables to human language.</i></p>
+      </td>
+      <td width="33.3%" align="center">
+        <img src="assets/ssfg/Hourly%20Predictions%20Chart.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
+        <br />
+        <b>3. Hourly Trends Chart</b>
+        <p><i>EPA-banded 24-hour predictive line chart with tooltips.</i></p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
 ## ⚡ Interactive System Architecture
 
 **AirLyst** uses a decoupled, dual-stage pipeline that integrates weather & air quality ingestion, sliding temporal window engineering, model tournament selection, cloud-hosted registries, and live SHAP-based local explainability.
@@ -83,44 +130,27 @@ flowchart TD
 
 ---
 
-## 📷 Interactive Dashboard Showcase
+## 🛠️ Technology Stack
 
-Here is a visual walk-through of the premium **AirLyst Next.js Frontend Dashboard** showing real-time observations, 72-hour forecast charts, and local AI explanation widgets:
-
-<div align="center">
-  <table>
-    <tr>
-      <td width="33.3%" align="center">
-        <img src="assets/ssfg/AeroVibe%20Main%20Dashboard.png" alt="AirLyst Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
-        <br />
-        <b>1. Main Dashboard View</b>
-        <p><i>Real-time AQI dials, weather metrics, and daily predictions.</i></p>
-      </td>
-      <td width="33.3%" align="center">
-        <img src="assets/ssfg/AI%20Explanations%20&amp;%20SHAP%20Insights.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
-        <br />
-        <b>2. AI SHAP Insights</b>
-        <p><i>Local Shapley explanations translating variables to human language.</i></p>
-      </td>
-      <td width="33.3%" align="center">
-        <img src="assets/ssfg/Hourly%20Predictions%20Chart.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
-        <br />
-        <b>3. Hourly Trends Chart</b>
-        <p><i>EPA-banded 24-hour predictive line chart with tooltips.</i></p>
-      </td>
-    </tr>
-  </table>
-</div>
+| Component | Technology | Purpose |
+| :--- | :--- | :--- |
+| **Language** | Python 3.9+ | Main logic and AI model development. |
+| **Web Backend** | FastAPI | High-speed API for serving real-time forecasts. |
+| **Frontend** | Next.js, TailwindCSS | Professional, responsive user dashboard. |
+| **Database** | Hopsworks Feature Store | Cloud storage for consistent training and inference data. |
+| **AI Models** | XGBoost, LightGBM, Ridge | High-accuracy regression for time-series forecasting. |
+| **Explainability** | SHAP (Shapley Values) | Identifying which factors (wind, humidity) drive pollution. |
+| **Generative AI**| Gemini 2.0 Flash / OpenRouter | Translating complex data into simple human insights. |
 
 ---
 
-## ⚙️ Core MLOps Components Explained
+## ⚙️ Core MLOps Components & Directory Deep-Dive
 
-* **Feature Store Integration**: AirLyst uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew.
-* **Temporal Lags & Rolles**: Computes sliding temporal lags (`1h`, `3h`, `6h`, `24h`) and running statistics (6h & 24h moving averages of particulate concentrations).
-* **Model Tournament**: Retrains weekly. Competes Ridge, Random Forest, XGBoost, and LightGBM models using custom chronological time-series splitting to avoid future data leakage.
-* **Dynamic LLM Translations**: Integrates **OpenRouter API** with the **`google/gemini-2.5-flash`** model to translate technical air quality drivers into friendly, 2-sentence explanations dynamically.
-* **Live SHAP Explanations**: The `/explain` endpoint dynamically aggregates and calculates the absolute SHAP values across all real-time hourly forecasts in memory, ensuring that the model's feature importance rankings instantly adapt to live weather and pollution patterns.
+* **Feature Store Integration (`src/feature_pipeline/`)**: AirLyst uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew. The system computes sliding temporal lags (`1h`, `3h`, `6h`, `24h`) and moving averages.
+* **Model Tournament (`src/ml/`)**: Trains models (Ridge, Random Forest, XGBoost, LightGBM) using chronological time-series splitting to avoid leakage. Selects the best performing model based on a Composite Rank Score (MAE, RMSE, R2) and promotes it to the Hopsworks Model Registry.
+* **Dynamic AI Translations (`src/api/routes/forecast.py`)**: Integrates OpenRouter API with `google/gemini-2.5-flash` to dynamically translate technical air quality drivers (derived via SHAP) into friendly, 2-sentence explanations.
+* **Live SHAP Explanations (`src/ml/inference.py`)**: The inference pipeline calculates absolute SHAP values across real-time hourly forecasts in memory, ensuring feature importance rankings adapt to live patterns instantly.
+* **FastAPI Service (`src/api/`)**: Provides REST endpoints with CORS and automated fallback configurations, serving both real-time metrics and explainability insights.
 
 ---
 
@@ -130,7 +160,8 @@ Here is a visual walk-through of the premium **AirLyst Next.js Frontend Dashboar
 ```bash
 # Activate virtual environment
 python -m venv venv
-venv\Scripts\activate
+venv\Scripts\activate  # On Windows
+# source venv/bin/activate # On Unix/MacOS
 
 # Install requirements
 pip install -r requirements.txt
@@ -148,6 +179,7 @@ pnpm dev
 ```
 *Interactive dashboard runs at: http://localhost:3000*
 *Hosted Interactive dashboard runs at: https://air-lyst.vercel.app*
+
 ---
 
 ## 👨‍💻 Built & Engineered By
@@ -169,7 +201,6 @@ pnpm dev
     <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail" />
   </a>
 </p>
+<p><i>Data Science Intern Project (10Pearls)</i></p>
 
 </div>
-
-
