@@ -12,6 +12,7 @@ if str(BACKEND_DIR) not in sys.path:
 # Import run_inference function and get_aqi_status function
 from src.ml.inference import run_inference
 from src.ml.training import get_aqi_status
+from src.utils.config import settings
 
 # Initialize the router
 router = APIRouter(
@@ -78,33 +79,57 @@ def get_forecast():
                     feat_vals = [s[feat] for s in metrics["shaps"] if feat in s]
                     avg_shaps[feat] = sum(feat_vals) / len(feat_vals)
 
-            # Map the top SHAP features of the LightGBM model to friendly descriptions
+            # Dictionary mapping for clean lookup (no complex if-elif chain)
+            FEATURE_MAP = {
+                "lag_1h": "remaining pollution from previous hours",
+                "lag_3h": "remaining pollution from previous hours",
+                "lag_24h": "remaining pollution from previous hours",
+                "rolling": "fine dust and smoke particles",
+                "pm2_5": "fine dust and smoke particles",
+                "pm10": "fine dust and smoke particles",
+                "nitrogen_dioxide": "traffic exhaust and vehicle smoke",
+                "sulphur_dioxide": "factory/industrial emissions",
+                "carbon_monoxide": "smoke from burning fuels",
+                "temperature_2m": "hot weather trapping the dirty air",
+                "wind_speed_10m": "slow wind failing to clear the air"
+            }
+
             reasons = []
             if avg_shaps:
-                # Sort features by absolute impact
+                # Sort features by absolute impact and take top 2 drivers
                 sorted_feats = sorted(avg_shaps.items(), key=lambda x: abs(x[1]), reverse=True)
-                
-                # Take top 2 drivers
                 for feat_name, shap_val in sorted_feats[:2]:
-                    if "lag_1h" in feat_name or "lag_3h" in feat_name or "lag_24h" in feat_name:
-                        reasons.append("pollution already floating in the air from previous hours")
-                    elif "rolling" in feat_name or "pm2_5" in feat_name or "pm10" in feat_name:
-                        reasons.append("soot and dust particles suspended in the atmosphere")
-                    elif "nitrogen_dioxide" in feat_name:
-                        reasons.append("smoke and exhaust fumes from traffic traffic")
-                    elif "sulphur_dioxide" in feat_name:
-                        reasons.append("harmful gases emitted from local industries")
-                    elif "carbon_monoxide" in feat_name:
-                        reasons.append("carbon monoxide gas from burning fuels")
-                    elif "temperature_2m" in feat_name:
-                        reasons.append("warm weather trapping dirty air near the ground")
-                    elif "wind_speed_10m" in feat_name:
-                        reasons.append("still winds that fail to blow away the dust")
+                    # Find matching description from dictionary
+                    matched = next((val for key, val in FEATURE_MAP.items() if key in feat_name), None)
+                    if matched:
+                        reasons.append(matched)
 
             if not reasons:
-                reasons.append("stable atmospheric conditions and standard urban emissions")
+                reasons.append("normal weather and everyday city emissions")
 
-            explanation = f"Driven mainly by " + " combined with ".join(reasons) + "."
+            # --- DYNAMIC GEMINI LLM INTEGRATION ---
+            explanation = None
+            if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY.strip():
+                try:
+                    import google.generativeai as genai
+                    genai.configure(api_key=settings.GEMINI_API_KEY.strip())
+                    model = genai.GenerativeModel('gemini-pro')
+                    
+                    # Design a highly structured prompt to get a clean, friendly 1-sentence response
+                    prompt = (
+                        f"Based on the air quality drivers: {', '.join(reasons)}. "
+                        f"Write a friendly, simple 1-sentence summary of what is causing the air quality. "
+                        f"Do not use markdown, do not use bullet points, do not exceed 15 words, and do not use greeting words."
+                    )
+                    response = model.generate_content(prompt)
+                    explanation = response.text.strip()
+                except Exception as e:
+                    # Fallback if API key is invalid or request fails
+                    explanation = None
+
+            # Standard simple fallback logic if Gemini is offline, key is missing, or package is not installed:
+            if not explanation:
+                explanation = f"Driven mainly by " + " combined with ".join(reasons) + "."
 
             # Calculate time range for this day
             day_items = [item for item in forecast_list if item["time"].startswith(date)]

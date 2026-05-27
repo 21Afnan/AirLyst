@@ -41,6 +41,9 @@ class Settings:
             self.WEATHER_URL = os.getenv("WEATHER_URL")
             self.AIR_URL = os.getenv("AIR_URL")
             self.FORECAST_URL = os.getenv("FORECAST_URL")
+
+            # Gemini Key
+            self.GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
             
             # 3. CRITICAL CHECKS
             if not self.HOPSWORKS_KEY:

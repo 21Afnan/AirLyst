@@ -39,3 +39,4 @@ torchaudio==2.6.0
 # API Framework
 fastapi==0.115.6
 uvicorn==0.34.0
+google-generativeai>=0.8.0
