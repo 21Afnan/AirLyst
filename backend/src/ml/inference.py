@@ -33,7 +33,7 @@ def fetch_forecast_weather() -> pd.DataFrame:
         "longitude": settings.LONGITUDE,
         "hourly": WEATHER_VARIABLES,
         "past_days": 2,
-        "forecast_days": 3,
+        "forecast_days": 4,
         "timezone": "auto"
     }
     try:
@@ -56,7 +56,7 @@ def fetch_forecast_air_quality() -> pd.DataFrame:
         "longitude": settings.LONGITUDE,
         "hourly": AIR_QUALITY_VARIABLES,
         "past_days": 2,
-        "forecast_days": 3,
+        "forecast_days": 4,
         "timezone": "auto"
     }
     try:
@@ -202,25 +202,67 @@ if __name__ == "__main__":
     forecast = results.get("forecast", [])
     current = results.get("current")
     
+    print("\n" + "="*80)
+    print(f"               AEROVIBE: LOCAL INFERENCE RUN FOR {settings.CITY.upper()}")
+    print("="*80)
+    
     if current:
-        print(f"\nCURRENT AQI: {current['aqi']} ({current['status']})")
-        
+        print(f"\n[CURRENT AIR QUALITY STATUS - {current['time']}]")
+        print(f"  - Actual Open-Meteo AQI: {current['open_meteo_aqi']}")
+        print(f"  - Model Predicted AQI:   {current['aqi']}")
+        diff = current['aqi'] - current['open_meteo_aqi']
+        diff_str = f"+{diff}" if diff > 0 else str(diff)
+        print(f"  - Prediction Difference: {diff_str} AQI points")
+        print(f"  - Status Category:       {current['status']}")
+        print(f"  - Temp: {current['temperature_2m']}°C | Wind: {current['wind_speed_10m']} mph | Pressure: {current['surface_pressure']} mb")
+        print(f"  - PM2.5: {current['pm2_5']} ug/m3 | PM10: {current['pm10']} ug/m3 | NO2: {current['nitrogen_dioxide']} ppb")
+    else:
+        print("\n[WARNING] No current hour readings returned.")
+
     if forecast:
-        print(f"\n{'='*75}")
-        print(f"   72h AQI FORECAST FOR {settings.CITY.upper()} — Actual vs Predicted")
-        print(f"{'='*75}")
-        print(f"{'Time':<22} {'Open-Meteo':>10}  {'Our Model':>10}  {'Diff':>5}  {'Status'}")
-        print(f"{'-'*75}")
+        # Group forecast hourly items by calendar date
+        days_map = {}
         for r in forecast:
-            diff = r['aqi'] - r['open_meteo_aqi']
-            diff_str = f"+{diff}" if diff > 0 else str(diff)
-            print(
-                f"{r['time']:<22} "
-                f"{r['open_meteo_aqi']:>10}  "
-                f"{r['aqi']:>10}  "
-                f"{diff_str:>5}  "
-                f"{r['status']}"
-            )
-        print(f"{'='*75}")
-        print(f"Total: {len(forecast)} hour predictions\n")
+            day_date = r["time"].split(" ")[0] # YYYY-MM-DD
+            if day_date not in days_map:
+                days_map[day_date] = []
+            days_map[day_date].append(r)
+            
+        # Get today's date to filter out (only show future next 3 days)
+        from datetime import datetime
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        future_days = sorted([(date, items) for date, items in days_map.items() if date != today_str])
+        
+        print(f"\nTotal Future Predictions Loaded: {len(forecast)} hours across {len(days_map)} calendar dates.")
+        
+        # Print hourly breakdowns and averages for the next 3 days
+        for date, items in future_days[:3]:
+            print("\n" + "-"*80)
+            print(f" [DATE] FORECAST DATE: {date} (24h Daily Average)")
+            print("-"*80)
+            print(f"{'Time':<12} | {'Actual (Open-Meteo)':^22} | {'Predicted (Model)':^20} | {'Diff':^8} | {'Status'}")
+            print("-"*80)
+            
+            actual_sum = 0
+            pred_sum = 0
+            
+            for item in items:
+                time_only = item["time"].split(" ")[1]
+                actual = item["open_meteo_aqi"]
+                predicted = item["aqi"]
+                actual_sum += actual
+                pred_sum += predicted
+                
+                diff = predicted - actual
+                diff_str = f"+{diff}" if diff > 0 else str(diff)
+                
+                print(f"{time_only:<12} | {actual:^22} | {predicted:^20} | {diff_str:^8} | {item['status']}")
+                
+            avg_actual = round(actual_sum / len(items), 1)
+            avg_pred = round(pred_sum / len(items), 1)
+            print("-"*80)
+            print(f" >>> DAILY AVERAGE: Actual: {avg_actual} AQI | Predicted: {avg_pred} AQI (Diff: {round(avg_pred - avg_actual, 1)})")
+            print("-"*80)
+            
+    print("\n" + "="*80 + "\n")
 

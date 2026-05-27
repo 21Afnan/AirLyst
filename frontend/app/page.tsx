@@ -171,6 +171,11 @@ export default function Home() {
                           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                             {day.date}
                           </p>
+                          {day.time_range && (
+                            <p className="text-[10px] text-blue-600/80 dark:text-blue-400/80 font-bold uppercase tracking-wider mt-0.5">
+                              {day.time_range}
+                            </p>
+                          )}
                         </div>
                         {/* Status Badge */}
                         <span className={`text-xs font-bold px-3 py-1 rounded-xl bg-white/50 dark:bg-slate-800/80 border ${status.border} ${status.textColor}`}>

@@ -56,8 +56,14 @@ def get_forecast():
                 days_map[day_name]["shaps"].append(item["shap"])
 
         # Calculate Average AQI and dynamic SHAP-based explanation for each day
+        # Skip today's date so cards show tomorrow, day after, and in 3 days (full 24-hour averages)
+        from datetime import datetime
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        
         summaries = []
-        for i, (date, metrics) in enumerate(sorted(days_map.items())[:3]):
+        future_days = [(date, metrics) for date, metrics in sorted(days_map.items()) if date != today_str]
+        
+        for i, (date, metrics) in enumerate(future_days[:3]):
             aqis = metrics["aqis"]
             if not aqis:
                 continue
@@ -100,9 +106,25 @@ def get_forecast():
 
             explanation = f"Driven mainly by " + " combined with ".join(reasons) + "."
 
+            # Calculate time range for this day
+            day_items = [item for item in forecast_list if item["time"].startswith(date)]
+            time_range = ""
+            if day_items:
+                def to_12h(t_str):
+                    time_part = t_str.split(" ")[1] # "15:00"
+                    h, m = map(int, time_part.split(":"))
+                    suffix = "AM" if h < 12 else "PM"
+                    h_12 = h if h <= 12 else h - 12
+                    h_12 = 12 if h_12 == 0 else h_12
+                    return f"{h_12} {suffix}"
+                start_h = to_12h(day_items[0]["time"])
+                end_h = to_12h(day_items[-1]["time"])
+                time_range = f"{start_h} to {end_h}"
+
             summaries.append({
                 "label": f"Day {i+1}",
                 "date": date,
+                "time_range": time_range,
                 "avg_aqi": rounded_avg,
                 "status": status,
                 "is_hazardous": bool(rounded_avg > 150),
