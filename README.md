@@ -87,19 +87,19 @@ Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboa
   <table>
     <tr>
       <td width="33.3%" align="center">
-        <img src="docs/images/dashboard.png" alt="AeroVibe Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
+        <img src="backend/dashbaord-images/AeroVibe%20Main%20Dashboard.png" alt="AeroVibe Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
         <br />
         <b>1. Main Dashboard View</b>
         <p><i>Real-time AQI dials, weather metrics, and daily predictions.</i></p>
       </td>
       <td width="33.3%" align="center">
-        <img src="docs/images/metrics.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
+        <img src="backend/dashbaord-images/Hourly%20Predictions%20Chart.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
         <br />
         <b>2. Hourly Trends Chart</b>
         <p><i>EPA-banded 24-hour predictive line chart with tooltips.</i></p>
       </td>
       <td width="33.3%" align="center">
-        <img src="docs/images/features.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
+        <img src="backend/dashbaord-images/AI%20Explanations%20&amp;%20SHAP%20Insights.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
         <br />
         <b>3. AI SHAP Insights</b>
         <p><i>Local Shapley explanations translating variables to human language.</i></p>
@@ -115,7 +115,8 @@ Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboa
 * **Feature Store Integration**: AeroVibe uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew.
 * **Temporal Lags & Rolles**: Computes sliding temporal lags (`1h`, `3h`, `6h`, `24h`) and running statistics (6h & 24h moving averages of particulate concentrations).
 * **Model Tournament**: Retrains weekly. Competes Ridge, Random Forest, XGBoost, and LightGBM models using custom chronological time-series splitting to avoid future data leakage.
-* **Local SHAP Explanations**: Features real-time tree explainers during inference, mapping complex model parameters to human-readable explanations (e.g. "still winds keeping pollutants in place").
+* **Dynamic LLM Translations**: Integrates **OpenRouter API** with the **`google/gemini-2.5-flash`** model to translate technical air quality drivers into friendly, 1-sentence explanations dynamically.
+* **Live SHAP Explanations**: The `/explain` endpoint dynamically aggregates and calculates the absolute SHAP values across all real-time hourly forecasts in memory, ensuring that the model's feature importance rankings instantly adapt to live weather and pollution patterns.
 
 ---
 
