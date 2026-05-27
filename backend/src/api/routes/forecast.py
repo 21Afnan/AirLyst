@@ -119,8 +119,8 @@ def get_forecast():
                     # Design a highly structured prompt to get a clean, friendly 1-sentence response
                     prompt = (
                         f"Based on the air quality drivers: {', '.join(reasons)}. "
-                        f"Write a friendly, simple 2-sentence summary of what is causing the air quality. "
-                        f"Rules: Do not use markdown, do not use bullet points, do not exceed 15 words, and do not use greeting words."
+                        f"Write a friendly, extremely simple 1-sentence explanation of the air quality that a common person or layman can easily understand. "
+                        f"Do not use technical jargon or metrics. Keep it under 15 words, and do not use markdown or greetings."
                     )
                     
                     headers = {
