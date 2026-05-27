@@ -70,28 +70,36 @@ export default function Home() {
       bgGradient: 'from-emerald-500/10 to-green-500/10 dark:from-emerald-500/5 dark:to-green-500/5',
       label: 'Good', 
       border: 'border-emerald-200/50 dark:border-emerald-900/30',
-      textColor: 'text-emerald-700 dark:text-emerald-400'
+      textColor: 'text-emerald-700 dark:text-emerald-400',
+      hoverBorder: 'hover:border-emerald-400 dark:hover:border-emerald-500',
+      hoverShadow: 'hover:shadow-[0_0_30px_rgba(16,185,129,0.45)]'
     };
     if (aqi <= 100) return { 
       color: 'from-amber-400 to-yellow-400',
       bgGradient: 'from-amber-400/10 to-yellow-400/10 dark:from-amber-400/5 dark:to-yellow-400/5',
       label: 'Moderate', 
       border: 'border-amber-200/40 dark:border-yellow-900/20',
-      textColor: 'text-amber-800 dark:text-amber-300'
+      textColor: 'text-amber-800 dark:text-amber-300',
+      hoverBorder: 'hover:border-amber-400 dark:hover:border-amber-500',
+      hoverShadow: 'hover:shadow-[0_0_30px_rgba(234,179,8,0.45)]'
     };
     if (aqi <= 150) return { 
       color: 'from-orange-500 to-amber-500',
       bgGradient: 'from-orange-500/10 to-amber-500/10 dark:from-orange-500/5 dark:to-orange-500/5',
       label: 'Unhealthy (Sensitive)', 
       border: 'border-orange-200/40 dark:border-orange-900/20',
-      textColor: 'text-orange-700 dark:text-orange-400'
+      textColor: 'text-orange-700 dark:text-orange-400',
+      hoverBorder: 'hover:border-orange-400 dark:hover:border-orange-500',
+      hoverShadow: 'hover:shadow-[0_0_30px_rgba(249,115,22,0.45)]'
     };
     return { 
       color: 'from-rose-500 to-red-500',
       bgGradient: 'from-rose-500/15 to-red-500/15 dark:from-rose-500/8 dark:to-red-500/8',
       label: 'Unhealthy', 
       border: 'border-rose-300/40 dark:border-rose-900/20',
-      textColor: 'text-rose-700 dark:text-rose-400'
+      textColor: 'text-rose-700 dark:text-rose-400',
+      hoverBorder: 'hover:border-rose-400 dark:hover:border-rose-500',
+      hoverShadow: 'hover:shadow-[0_0_30px_rgba(239,68,68,0.45)]'
     };
   };
 
@@ -151,7 +159,7 @@ export default function Home() {
                 return (
                   <div 
                     key={idx}
-                    className="group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/70 to-blue-50/30 dark:from-slate-900/70 dark:to-blue-950/30 backdrop-blur-xl border border-blue-200/20 dark:border-blue-900/20 p-6 md:p-8 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+                    className={`group relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/70 to-blue-50/30 dark:from-slate-900/70 dark:to-blue-950/30 backdrop-blur-xl border border-blue-200/20 dark:border-blue-900/20 p-6 md:p-8 transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between ${status.hoverBorder} ${status.hoverShadow}`}
                   >
                     <div>
                       {/* Date & Title */}

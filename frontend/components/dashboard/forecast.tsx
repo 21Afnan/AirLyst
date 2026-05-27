@@ -31,9 +31,9 @@ export function Forecast({ data }: ForecastProps) {
     if (aqi <= 50) {
       return {
         bg: "from-emerald-50/80 to-green-50/40 dark:from-emerald-950/25 dark:to-green-950/15",
-        border: "border-emerald-200/50 dark:border-emerald-900/40",
+        border: "border-emerald-200/50 dark:border-emerald-900/40 hover:border-emerald-400 dark:hover:border-emerald-500",
         glow: "from-emerald-300/20 to-green-300/20 dark:from-emerald-500/10 dark:to-green-500/5",
-        shadowHover: "hover:shadow-[0_0_30px_rgba(16,185,129,0.35)]",
+        shadowHover: "hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]",
         avgBg: "from-emerald-100/50 to-green-100/50 dark:from-emerald-900/30 dark:to-green-900/30",
         avgBorder: "border-emerald-200/40 dark:border-emerald-800/30"
       };
@@ -41,9 +41,9 @@ export function Forecast({ data }: ForecastProps) {
     if (aqi <= 100) {
       return {
         bg: "from-amber-50/80 to-yellow-50/40 dark:from-amber-950/25 dark:to-yellow-950/15",
-        border: "border-amber-200/50 dark:border-amber-900/40",
+        border: "border-amber-200/50 dark:border-amber-900/40 hover:border-amber-400 dark:hover:border-amber-500",
         glow: "from-amber-300/20 to-yellow-300/20 dark:from-amber-500/10 dark:to-yellow-500/5",
-        shadowHover: "hover:shadow-[0_0_30px_rgba(234,179,8,0.35)]",
+        shadowHover: "hover:shadow-[0_0_30px_rgba(234,179,8,0.5)]",
         avgBg: "from-amber-100/50 to-yellow-100/50 dark:from-amber-900/30 dark:to-yellow-900/30",
         avgBorder: "border-amber-200/40 dark:border-amber-800/30"
       };
@@ -51,9 +51,9 @@ export function Forecast({ data }: ForecastProps) {
     if (aqi <= 150) {
       return {
         bg: "from-orange-50/80 to-red-50/40 dark:from-orange-950/25 dark:to-red-950/15",
-        border: "border-orange-200/50 dark:border-orange-900/40",
-        glow: "from-orange-300/20 to-red-300/20 dark:from-orange-500/10 dark:to-red-500/5",
-        shadowHover: "hover:shadow-[0_0_30px_rgba(249,115,22,0.35)]",
+        border: "border-orange-200/50 dark:border-orange-900/40 hover:border-orange-400 dark:hover:border-orange-500",
+        glow: "from-orange-300/20 to-red-300/20 dark:from-orange-500/10 dark:to-orange-500/5",
+        shadowHover: "hover:shadow-[0_0_30px_rgba(249,115,22,0.5)]",
         avgBg: "from-orange-100/50 to-red-100/50 dark:from-orange-900/30 dark:to-red-900/30",
         avgBorder: "border-orange-200/40 dark:border-orange-800/30"
       };
@@ -61,18 +61,18 @@ export function Forecast({ data }: ForecastProps) {
     if (aqi <= 200) {
       return {
         bg: "from-red-50/80 to-rose-50/40 dark:from-red-950/25 dark:to-rose-950/15",
-        border: "border-red-200/50 dark:border-red-900/40",
+        border: "border-red-200/50 dark:border-red-900/40 hover:border-red-400 dark:hover:border-red-500",
         glow: "from-red-300/20 to-rose-300/20 dark:from-red-500/10 dark:to-rose-500/5",
-        shadowHover: "hover:shadow-[0_0_30px_rgba(239,68,68,0.35)]",
+        shadowHover: "hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]",
         avgBg: "from-red-100/50 to-rose-100/50 dark:from-red-900/30 dark:to-rose-900/30",
         avgBorder: "border-red-200/40 dark:border-red-800/30"
       };
     }
     return {
       bg: "from-purple-50/80 to-indigo-50/40 dark:from-purple-950/25 dark:to-indigo-950/15",
-      border: "border-purple-200/50 dark:border-purple-900/40",
+      border: "border-purple-200/50 dark:border-purple-900/40 hover:border-purple-400 dark:hover:border-purple-500",
       glow: "from-purple-300/20 to-indigo-300/20 dark:from-purple-500/10 dark:to-indigo-500/5",
-      shadowHover: "hover:shadow-[0_0_30px_rgba(168,85,247,0.35)]",
+      shadowHover: "hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]",
       avgBg: "from-purple-100/50 to-indigo-100/50 dark:from-purple-900/30 dark:to-indigo-900/30",
       avgBorder: "border-purple-200/40 dark:border-purple-800/30"
     };

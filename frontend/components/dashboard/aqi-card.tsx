@@ -12,8 +12,33 @@ export function AQICard({ data }: AQICardProps) {
   const level = getAQILevel(data.aqi);
   const percentage = (data.aqi / 500) * 100;
 
+  const getHoverStyles = (aqi: number) => {
+    if (aqi <= 50) return {
+      hoverBorder: "hover:border-emerald-400 dark:hover:border-emerald-500",
+      hoverShadow: "hover:shadow-[0_0_35px_rgba(16,185,129,0.5)]"
+    };
+    if (aqi <= 100) return {
+      hoverBorder: "hover:border-amber-400 dark:hover:border-amber-500",
+      hoverShadow: "hover:shadow-[0_0_35px_rgba(234,179,8,0.5)]"
+    };
+    if (aqi <= 150) return {
+      hoverBorder: "hover:border-orange-400 dark:hover:border-orange-500",
+      hoverShadow: "hover:shadow-[0_0_35px_rgba(249,115,22,0.5)]"
+    };
+    if (aqi <= 200) return {
+      hoverBorder: "hover:border-red-400 dark:hover:border-red-500",
+      hoverShadow: "hover:shadow-[0_0_35px_rgba(239,68,68,0.5)]"
+    };
+    return {
+      hoverBorder: "hover:border-purple-400 dark:hover:border-purple-500",
+      hoverShadow: "hover:shadow-[0_0_35px_rgba(168,85,247,0.5)]"
+    };
+  };
+
+  const hoverStyles = getHoverStyles(data.aqi);
+
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-50/80 via-cyan-50/60 to-blue-50/40 dark:from-slate-900/70 dark:via-blue-900/50 dark:to-cyan-900/40 backdrop-blur-2xl border border-cyan-200/50 dark:border-cyan-900/40 p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 animate-slide-in group col-span-1 md:col-span-2">
+    <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br from-sky-50/80 via-cyan-50/60 to-blue-50/40 dark:from-slate-900/70 dark:via-blue-900/50 dark:to-cyan-900/40 backdrop-blur-2xl border border-cyan-200/50 dark:border-cyan-900/40 p-8 shadow-2xl transition-all duration-500 animate-slide-in group col-span-1 md:col-span-2 ${hoverStyles.hoverBorder} ${hoverStyles.hoverShadow}`}>
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden rounded-3xl">
         <div className="absolute -top-32 -right-32 w-64 h-64 bg-gradient-to-br from-cyan-400/20 to-blue-400/15 dark:from-cyan-500/10 dark:to-blue-500/5 rounded-full blur-3xl animate-float" />
