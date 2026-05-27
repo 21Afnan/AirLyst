@@ -213,11 +213,6 @@ export default function Home() {
             <AQITrendChart data={data.forecast24h} />
           </div>
 
-          {/* Footer */}
-          <div className="text-center text-xs text-slate-500 dark:text-slate-500 py-6 border-t border-blue-200/20 dark:border-blue-900/20">
-            <p>© {new Date().getFullYear()} AirLyst. All rights reserved. Powered by Hopsworks Model Registry & LightGBM.</p>
-          </div>
-
         </div>
       </div>
     </main>
