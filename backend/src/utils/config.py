@@ -3,12 +3,15 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
-from src.utils.logger import get_logger
-
 # --- SMART PATH LOGIC ---
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent
+BACKEND_DIR = ROOT_DIR / "backend"
+if str(BACKEND_DIR) not in sys.path:
+    sys.path.append(str(BACKEND_DIR))
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
+
+from src.utils.logger import get_logger
 
 logger = get_logger("ConfigLoader")
 
@@ -78,6 +81,7 @@ class Settings:
         print(f"Hopsworks:   {self.HOPSWORKS_PROJECT} at {self.HOPSWORKS_HOST}")
         print(f"Weather URL: {self.WEATHER_URL}")
         print(f"Air URL:     {self.AIR_URL}")
+        print(f"OpenRouter API Key: {self.GEMINI_API_KEY[:8]}********")
         if self.HOPSWORKS_KEY:
              print(f"API Key:     {self.HOPSWORKS_KEY[:8]}********")
         print("---------------------------------------\n")

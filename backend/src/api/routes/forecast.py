@@ -20,6 +20,21 @@ router = APIRouter(
     tags=["Forecast"]
 )
 
+# Global dictionary mapping for clean feature explanation translations
+FEATURE_MAP = {
+    "lag_1h": "pollution already floating in the air from previous hours",
+    "lag_3h": "pollution already floating in the air from previous hours",
+    "lag_24h": "pollution already floating in the air from previous hours",
+    "rolling": "fine dust and smoke particles",
+    "pm2_5": "fine dust and smoke particles",
+    "pm10": "fine dust and smoke particles",
+    "nitrogen_dioxide": "smoke and exhaust fumes from traffic",
+    "sulphur_dioxide": "factory/industrial emissions",
+    "carbon_monoxide": "smoke from burning fuels",
+    "temperature_2m": "warm weather trapping dirty air near the ground",
+    "wind_speed_10m": "still winds that fail to blow away the dust"
+}
+
 @router.get("")
 def get_forecast():
     """
@@ -79,20 +94,7 @@ def get_forecast():
                     feat_vals = [s[feat] for s in metrics["shaps"] if feat in s]
                     avg_shaps[feat] = sum(feat_vals) / len(feat_vals)
 
-            # Dictionary mapping for clean lookup (no complex if-elif chain)
-            FEATURE_MAP = {
-                "lag_1h": "remaining pollution from previous hours",
-                "lag_3h": "remaining pollution from previous hours",
-                "lag_24h": "remaining pollution from previous hours",
-                "rolling": "fine dust and smoke particles",
-                "pm2_5": "fine dust and smoke particles",
-                "pm10": "fine dust and smoke particles",
-                "nitrogen_dioxide": "traffic exhaust and vehicle smoke",
-                "sulphur_dioxide": "factory/industrial emissions",
-                "carbon_monoxide": "smoke from burning fuels",
-                "temperature_2m": "hot weather trapping the dirty air",
-                "wind_speed_10m": "slow wind failing to clear the air"
-            }
+
 
             reasons = []
             if avg_shaps:
@@ -107,22 +109,41 @@ def get_forecast():
             if not reasons:
                 reasons.append("normal weather and everyday city emissions")
 
-            # --- DYNAMIC GEMINI LLM INTEGRATION ---
+            # --- DYNAMIC OPENROUTER LLM INTEGRATION ---
             explanation = None
             if settings.GEMINI_API_KEY and settings.GEMINI_API_KEY.strip():
                 try:
-                    import google.generativeai as genai
-                    genai.configure(api_key=settings.GEMINI_API_KEY.strip())
-                    model = genai.GenerativeModel('gemini-pro')
+                    import requests
+                    import json
                     
                     # Design a highly structured prompt to get a clean, friendly 1-sentence response
                     prompt = (
                         f"Based on the air quality drivers: {', '.join(reasons)}. "
-                        f"Write a friendly, simple 1-sentence summary of what is causing the air quality. "
-                        f"Do not use markdown, do not use bullet points, do not exceed 15 words, and do not use greeting words."
+                        f"Write a friendly, simple 2-sentence summary of what is causing the air quality. "
+                        f"Rules: Do not use markdown, do not use bullet points, do not exceed 15 words, and do not use greeting words."
                     )
-                    response = model.generate_content(prompt)
-                    explanation = response.text.strip()
+                    
+                    headers = {
+                        "Authorization": f"Bearer {settings.GEMINI_API_KEY.strip()}",
+                        "Content-Type": "application/json"
+                    }
+                    data = {
+                        "model": "google/gemini-2.5-flash",
+                        "messages": [
+                            {"role": "user", "content": prompt}
+                        ],
+                        "max_tokens": 50
+                    }
+                    
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        data=json.dumps(data),
+                        timeout=10
+                    )
+                    
+                    if response.ok:
+                        explanation = response.json()["choices"][0]["message"]["content"].strip()
                 except Exception as e:
                     # Fallback if API key is invalid or request fails
                     explanation = None
@@ -172,8 +193,80 @@ def get_forecast():
 def get_shap_explanation():
     """
     Returns the textual SHAP explanation report and feature importances as JSON.
+    Calculated dynamically from real-time inference data.
     """
     try:
+        # Try to calculate dynamically first from live forecast data
+        try:
+            data = run_inference()
+            all_items = []
+            if data.get("current"):
+                all_items.append(data["current"])
+            if data.get("forecast"):
+                all_items.extend(data["forecast"])
+                
+            shaps_list = [item["shap"] for item in all_items if "shap" in item]
+            if shaps_list:
+                # We have live SHAP values! Let's aggregate them
+                feature_sums = {}
+                for sh in shaps_list:
+                    for feat, val in sh.items():
+                        feature_sums[feat] = feature_sums.get(feat, 0.0) + abs(val)
+                
+                num_records = len(shaps_list)
+                feature_avg = {feat: val / num_records for feat, val in feature_sums.items()}
+                
+                # Sort features by impact
+                sorted_features = sorted(feature_avg.items(), key=lambda x: x[1], reverse=True)
+                
+                # Format feature importance list
+                feature_importance = []
+                for i, (feat, impact) in enumerate(sorted_features):
+                    matched = next((val for key, val in FEATURE_MAP.items() if key in feat), feat)
+                    feature_importance.append({
+                        "rank": str(i + 1),
+                        "feature": feat,
+                        "friendly_name": matched,
+                        "impact": round(impact, 4)
+                    })
+                
+                # Generate dynamic report content
+                report_lines = [
+                    "======================================================================",
+                    "                  [AQI MODEL LIVE SHAP EXPLANATION REPORT]",
+                    "======================================================================",
+                    "",
+                    "Model Explained:    LightGBM",
+                    f"Dataset Size:       {num_records} live forecast records",
+                    "",
+                    "Mean Absolute SHAP Values (Feature Impact on Predicted AQI):",
+                    "----------------------------------------------------------------------"
+                ]
+                for item in feature_importance:
+                    report_lines.append(f"{item['rank']:<2} | {item['feature']:<25} | Impact: ~{item['impact']:.4f} AQI points")
+                report_lines.append("----------------------------------------------------------------------")
+                report_lines.append("")
+                report_lines.append("Top Live Feature Interpretations:")
+                report_lines.append("----------------------------")
+                
+                for item in feature_importance[:3]:
+                    report_lines.append(
+                        f"- {item['feature']}: On average, this feature shifts the predicted AQI by {item['impact']:.2f} points.\n"
+                        f"  -> Friendly translation: {item['friendly_name'].capitalize()}"
+                    )
+                
+                raw_report = "\n".join(report_lines)
+                
+                return {
+                    "model_name": "LightGBM",
+                    "raw_report": raw_report,
+                    "feature_importance": feature_importance
+                }
+        except Exception as e:
+            # If dynamic calculation fails, fall back to file/hardcoded
+            pass
+
+        # Fallback to static file
         report_path = BACKEND_DIR / "reports/shap_explanation_report.txt"
         if not report_path.exists():
             # Trigger SHAP analysis if the report is not pre-generated
@@ -186,11 +279,11 @@ def get_shap_explanation():
                     "model_name": "LightGBM",
                     "explanation": "SHAP explanation report is not ready. Showing pre-calculated feature importances.",
                     "feature_importance": [
-                        {"rank": "1", "feature": "us_aqi_lag_1h", "impact": 27.77},
-                        {"rank": "2", "feature": "us_aqi_lag_3h", "impact": 2.93},
-                        {"rank": "3", "feature": "pm2_5_rolling_24h", "impact": 2.72},
-                        {"rank": "4", "feature": "hour", "impact": 0.63},
-                        {"rank": "5", "feature": "temperature_2m", "impact": 0.60}
+                        {"rank": "1", "feature": "us_aqi_lag_1h", "friendly_name": "pollution already floating in the air from previous hours", "impact": 27.77},
+                        {"rank": "2", "feature": "us_aqi_lag_3h", "friendly_name": "pollution already floating in the air from previous hours", "impact": 2.93},
+                        {"rank": "3", "feature": "pm2_5_rolling_24h", "friendly_name": "fine dust and smoke particles", "impact": 2.72},
+                        {"rank": "4", "feature": "hour", "friendly_name": "hour of the day", "impact": 0.63},
+                        {"rank": "5", "feature": "temperature_2m", "friendly_name": "warm weather trapping dirty air near the ground", "impact": 0.60}
                     ]
                 }
         
@@ -220,9 +313,11 @@ def get_shap_explanation():
                         impact = float(impact_str)
                     except ValueError:
                         impact = 0.0
+                    matched = next((val for key, val in FEATURE_MAP.items() if key in feature), feature)
                     feature_importance.append({
                         "rank": rank,
                         "feature": feature,
+                        "friendly_name": matched,
                         "impact": impact
                     })
 
