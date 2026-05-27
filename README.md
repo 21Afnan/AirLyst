@@ -1,205 +1,168 @@
-# <img src="docs/images/cloud_rain.png" alt="Cloud with Lightning and Rain" width="50" height="50" class="animate-bounce" /> AirLyst: Enterprise-Grade AQI Forecasting System
-
 <div align="center">
+
+# 🌌 <span style="background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 3rem;">AeroVibe: Precision AQI Engine</span>
+
+### 🌬️ "Predicting the air you breathe, powered by state-of-the-art MLOps."
+
+<p align="center">
+  <a href="https://airlyst.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Live_Dashboard-AeroVibe_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
+  </a>
+</p>
 
 [![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Next.js](https://img.shields.io/badge/Next.js-14+-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Hopsworks](https://img.shields.io/badge/Hopsworks-Feature_Store-FF7F00?style=for-the-badge)](https://www.hopsworks.ai/)
-[![MLOps](https://img.shields.io/badge/MLOps-Production--Ready-blueviolet?style=for-the-badge)](https://www.hopsworks.ai/)
-
----
-
-### 🌬️ "Predicting the air you breathe, before you step out."
-
-**AirLyst** is a state-of-the-art MLOps-driven Air Quality Index (AQI) forecasting system. It retrieves meteorological and environmental pollutant data, engineers advanced temporal features, trains a model tournament to select the best regressor, registers versioned models to the cloud, and serves hourly predictions with live SHAP explanations.
-
-🌐 **[Experience the Live Web App Dashboard](https://airlyst.vercel.app)** *(Update this to your production domain)*
-
-[Technical Deep-Dive Docs](file:///c:/Users/Dell/Desktop/AirLyst/project_deep_dive_analysis.md) • [Report Issue](https://github.com/21Afnan/AirLyst/issues) • [Request Feature](https://github.com/21Afnan/AirLyst/issues)
 
 </div>
 
 ---
 
-## ⚡ MLOps System Architecture
+## ⚡ Interactive System Architecture
 
-AirLyst bridges the gap between raw data engineering and live user dashboards. The architecture is split into clean, modularized pipelines using the **Hopsworks Feature Store** to prevent training-serving skew.
+**AeroVibe** (formerly AirLyst) uses a decoupled, dual-stage pipeline that integrates weather & air quality ingestion, sliding temporal window engineering, model tournament selection, cloud-hosted registries, and live SHAP-based local explainability.
 
 ```mermaid
 flowchart TD
-    %% Styling
-    classDef datasource fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef featurestore fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef mlops fill:#fdd,stroke:#333,stroke-width:2px;
-    classDef api fill:#dfd,stroke:#333,stroke-width:2px;
-    classDef ui fill:#ffd,stroke:#333,stroke-width:2px;
+    %% Styling and Premium Palette
+    classDef datasource fill:#1E293B,stroke:#3B82F6,stroke-width:2px,color:#F8FAFC;
+    classDef featurestore fill:#1E1B4B,stroke:#818CF8,stroke-width:2px,color:#F8FAFC;
+    classDef pipeline fill:#0F172A,stroke:#0EA5E9,stroke-width:2px,color:#F8FAFC;
+    classDef mlops fill:#311042,stroke:#D946EF,stroke-width:2px,color:#F8FAFC;
+    classDef ui fill:#022C22,stroke:#10B981,stroke-width:2px,color:#F8FAFC;
 
-    %% Elements
-    OM_Air["Open-Meteo Air Quality API"]:::datasource
-    OM_Weather["Open-Meteo Weather API"]:::datasource
+    %% Data Sources
+    OM_Air["📡 Open-Meteo Air Quality API"]:::datasource
+    OM_Weather["📡 Open-Meteo Weather API"]:::datasource
 
-    subgraph Feature Pipeline [Daily Ingestion & Engineering]
-        DataMerger["DataMerger (data_merger.py)"]
-        FeatureEng["FeatureEngineer (feature_engineer.py)"]
-        FSClient["FeatureStoreClient (feature_store_client.py)"]
+    subgraph FE [Daily Ingestion & Feature Engineering]
+        DataMerger["Merged Data (data_merger.py)"]:::pipeline
+        FeatureEng["Lag & Rolling features (feature_engineer.py)"]:::pipeline
+        FSClient["FeatureStoreClient (feature_store_client.py)"]:::pipeline
     end
 
-    Hopsworks["Hopsworks Feature Store"]:::featurestore
+    Hopsworks["☁️ Hopsworks Online Feature Store"]:::featurestore
 
-    subgraph Training Pipeline [Model Tournament & Registry]
-        Prep["Preprocessor (preprocessing.py)"]
-        Tournament["Model Tournament (models.py)"]
-        Training["Trainer & Registry (training.py)"]
-        SHAP["SHAP Explanation (shap_explanation.py)"]
+    subgraph ML [Training Tournament & Explainability]
+        Prep["Scaler & Chronological Split (preprocessing.py)"]:::mlops
+        Tournament["Tournament Selection (models.py)"]:::mlops
+        Training["Model Registry Sync (training.py)"]:::mlops
+        SHAP["SHAP global explanations (shap_explanation.py)"]:::mlops
     end
 
-    ModelRegistry["Hopsworks Model Registry"]:::featurestore
+    ModelRegistry["📦 Hopsworks Model Registry"]:::featurestore
 
-    subgraph Serving Layer [FastAPI Endpoints]
-        MainAPI["Main API (main.py)"]
-        ForecastRouter["Forecast Router (forecast.py)"]
-        Inference["Inference Service (inference.py)"]
+    subgraph API [FastAPI Service Layer]
+        Inference["Inference Pipeline (inference.py)"]:::pipeline
+        ForecastRouter["Forecast API Route (forecast.py)"]:::pipeline
+        MainAPI["Main Web Server (main.py)"]:::pipeline
     end
 
-    subgraph NextJS App [Frontend Dashboard]
-        UI_Home["Dashboard Home (page.tsx)"]
-        APIClient["API Client (client.ts)"]
-        AQICard["AQICard Component"]:::ui
-        TrendChart["AQITrendChart Component"]:::ui
-        AIInsights["AIInsights Component"]:::ui
+    subgraph NextJS [Next.js Dashboard UI]
+        APIClient["API client.ts (Mock Fallback)"]:::ui
+        AQICard["AQICard Progress Widget"]:::ui
+        TrendChart["Interactive Trend Chart"]:::ui
+        AIInsights["Live SHAP AI Insights"]:::ui
     end
 
-    %% Flows
-    OM_Air --> DataMerger
-    OM_Weather --> DataMerger
-    DataMerger --> FeatureEng
-    FeatureEng --> FSClient
-    FSClient --> Hopsworks
-    
-    Hopsworks --> Prep
-    Prep --> Tournament
-    Tournament --> Training
-    Training --> SHAP
-    Training --> ModelRegistry
-    
-    ModelRegistry --> Inference
-    Inference --> ForecastRouter
-    ForecastRouter --> MainAPI
-    
-    MainAPI --> APIClient
-    APIClient --> UI_Home
-    UI_Home --> AQICard
-    UI_Home --> TrendChart
-    UI_Home --> AIInsights
+    %% Connections
+    OM_Air & OM_Weather --> DataMerger
+    DataMerger --> FeatureEng --> FSClient --> Hopsworks
+    Hopsworks --> Prep --> Tournament --> Training --> ModelRegistry
+    Training -.-> SHAP
+    ModelRegistry --> Inference --> ForecastRouter --> MainAPI --> APIClient --> AQICard & TrendChart & AIInsights
+
+    linkStyle default stroke:#64748B,stroke-width:2px;
 ```
+
+---
+
+## 📷 Interactive Dashboard Showcase
+
+Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboard** showing real-time observations, 72-hour forecast charts, and local AI explanation widgets:
+
+<div align="center">
+  <table>
+    <tr>
+      <td width="33.3%" align="center">
+        <img src="docs/images/dashboard.png" alt="AeroVibe Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
+        <br />
+        <b>1. Main Dashboard View</b>
+        <p><i>Real-time AQI dials, weather metrics, and daily predictions.</i></p>
+      </td>
+      <td width="33.3%" align="center">
+        <img src="docs/images/metrics.png" alt="Hourly Predictions Chart" style="border-radius: 12px; border: 2px solid #818CF8;" />
+        <br />
+        <b>2. Hourly Trends Chart</b>
+        <p><i>EPA-banded 24-hour predictive line chart with tooltips.</i></p>
+      </td>
+      <td width="33.3%" align="center">
+        <img src="docs/images/features.png" alt="AI Explanations & SHAP Insights" style="border-radius: 12px; border: 2px solid #D946EF;" />
+        <br />
+        <b>3. AI SHAP Insights</b>
+        <p><i>Local Shapley explanations translating variables to human language.</i></p>
+      </td>
+    </tr>
+  </table>
+</div>
 
 ---
 
 ## ⚙️ Core MLOps Components Explained
 
-If you are new to the codebase, here are the key MLOps components that power AirLyst:
-
-### 1. Unified Feature Store (Hopsworks)
-- **What it solves**: Prevents training-serving skew by using a single source of truth for both offline training and online serving.
-- **Pipeline**: Daily cron runs `run_feature_pipeline.py` which pulls the latest weather and air data, engineers features, and pushes them to Hopsworks.
-
-### 2. Temporal Feature Engineering
-- **Lags**: Captures historical momentum by shifting target values: `us_aqi_lag_1h`, `us_aqi_lag_3h`, `us_aqi_lag_6h`, and `us_aqi_lag_24h`.
-- **Rolling Statistics**: Tracks trend directions using 6-hour and 24-hour moving averages of PM2.5.
-
-### 3. Model Tournament & Registry
-- **Contenders**: Trains and compares Ridge Regression, Random Forest, XGBoost, and LightGBM.
-- **Validation**: Uses strict **Chronological Splitting** instead of random splits to prevent data leakage.
-- **Metric Tournament**: Models are ranked using a composite score based on MAE, RMSE, and R² scores. The best model is serialized and pushed to the Hopsworks Model Registry.
-
-### 4. Explainable AI (SHAP)
-- **Global Explanations**: During training, SHAP computes global feature importances and exports beeswarm plots to the `reports` directory.
-- **Real-Time Local Explanations**: When `/api/forecast` is called, `shap.TreeExplainer` is evaluated on the fly to determine the top 2 features driving the prediction, and translates them into user-friendly text (e.g., "warm weather trapping dirty air" or "traffic exhaust fumes").
+* **Feature Store Integration**: AeroVibe uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew.
+* **Temporal Lags & Rolles**: Computes sliding temporal lags (`1h`, `3h`, `6h`, `24h`) and running statistics (6h & 24h moving averages of particulate concentrations).
+* **Model Tournament**: Retrains weekly. Competes Ridge, Random Forest, XGBoost, and LightGBM models using custom chronological time-series splitting to avoid future data leakage.
+* **Local SHAP Explanations**: Features real-time tree explainers during inference, mapping complex model parameters to human-readable explanations (e.g. "still winds keeping pollutants in place").
 
 ---
 
-## 🖼️ Premium UI/UX Features
+## 🚀 Setup & Execution Guide
 
-The frontend application in `frontend/` is built using Next.js 14, Tailwind CSS, and Recharts:
-* 🌟 **Glassmorphic Stat Cards**: Lift-on-hover cards showing daily forecasts with ambient background glows.
-* 📈 **Interactive Severity Trends**: 24-hour interactive charts shaded by standard US-EPA AQI health levels.
-* 🌓 **Dynamic Themes**: Beautiful animations, transitions, and native dark/light modes.
-* 🧩 **Fail-Safe Mock Data**: The frontend api client detects if the FastAPI server is down and gracefully falls back to realistic mock predictions to ensure the UI remains fully functional.
-
----
-
-## 📂 Project Structure
-
+### 🐍 Backend Service (FastAPI)
 ```bash
-AirLyst/
-├── backend/                    # FastAPI Backend
-│   ├── data/                   # Cache & local data files
-│   ├── logs/                   # System logging (Rotating pipeline.log)
-│   ├── models/                 # Local fallback .joblib files
-│   ├── reports/                # SHAP beeswarm & bar importance plots
-│   └── src/                    # Python Source
-│       ├── api/                # FastAPI routing & CORS configuration
-│       ├── data_ingestion/     # Clients to ingest Open-Meteo variables
-│       ├── feature_pipeline/   # Lag calculations, rolling averages & Hopsworks sync
-│       ├── ml/                 # Tournament training, unified loader & inference + SHAP
-│       └── utils/              # Configuration validations, schemas & logging settings
-├── frontend/                   # Next.js App
-│   ├── app/                    # Global styling (globals.css), layout, & index
-│   ├── components/             # Reusable UI widgets (AQICard, WeatherWidget, TrendChart)
-│   ├── hooks/                  # Responsive and toast custom hooks
-│   └── lib/                    # API client with fallback mock data & typings
-├── .env                        # Local environments (API keys, project settings)
-├── requirements.txt            # Python dependencies
-└── README.md                   # Project landing page
-```
-
----
-
-## 🚀 Quick Setup & Getting Started
-
-### 🐍 Backend setup
-```bash
-# Set up Python Environment
+# Activate virtual environment
 python -m venv venv
-venv\Scripts\activate  # Windows
-source venv/bin/activate  # Unix/Mac
+venv\Scripts\activate
 
-# Install Packages
+# Install requirements
 pip install -r requirements.txt
 
-# Start Server
+# Run server
 uvicorn backend.src.api.main:app --reload --port 8000
 ```
-*API docs will be available at http://localhost:8000/docs*
+*Swagger docs run at: http://localhost:8000/docs*
 
-### ⚛️ Frontend setup
+### ⚛️ Frontend UI (Next.js)
 ```bash
 cd frontend
 pnpm install
 pnpm dev
 ```
-*Web dashboard will be available at http://localhost:3000*
+*Interactive dashboard runs at: http://localhost:3000*
 
 ---
 
-## 🛸 Hosting & Deployment Guide
+## 👨‍💻 Built & Engineered By
 
-### Frontend Deployment (Vercel)
-The easiest way to deploy your Next.js application:
-1. Connect your repository to **Vercel**.
-2. Configure Environment variables (if you have custom backend endpoints).
-3. Vercel will auto-detect the Next.js setup, compile with Turbopack, and build a globally distributed static web application.
+<div align="center">
 
-### Backend Deployment (Render or AWS)
-To deploy your FastAPI server:
-1. Set up a Web Service on **Render**.
-2. Add your `.env` secrets (e.g. `HOPSWORKS_API_KEY`, URLs, project details).
-3. Use the start command:
-   ```bash
-   uvicorn backend.src.api.main:app --host 0.0.0.0 --port $PORT
-   ```
+### **Afnan Shoukat**
 
----
-<p align="center"><b>Designed with ❤️ by the AirLyst Team. Powered by Hopsworks, FastAPI, and Next.js.</b></p>
+<p>
+  <a href="https://linkedin.com/in/afnanshoukat" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://github.com/21Afnan" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="mailto:afnanshoukat35@gmail.com">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail" />
+  </a>
+</p>
+
+</div>
