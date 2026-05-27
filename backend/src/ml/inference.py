@@ -216,6 +216,7 @@ if __name__ == "__main__":
         print(f"  - Status Category:       {current['status']}")
         print(f"  - Temp: {current['temperature_2m']}°C | Wind: {current['wind_speed_10m']} mph | Pressure: {current['surface_pressure']} mb")
         print(f"  - PM2.5: {current['pm2_5']} ug/m3 | PM10: {current['pm10']} ug/m3 | NO2: {current['nitrogen_dioxide']} ppb")
+        print(f"  - SO2: {current['sulphur_dioxide']} ppb | CO: {current['carbon_monoxide']} ppm")
     else:
         print("\n[WARNING] No current hour readings returned.")
 
