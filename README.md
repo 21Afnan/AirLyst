@@ -147,7 +147,7 @@ pnpm install
 pnpm dev
 ```
 *Interactive dashboard runs at: http://localhost:3000*
-
+*Hosted Interactive dashboard runs at: https://air-lyst.vercel.app*
 ---
 
 ## 👨‍💻 Built & Engineered By
