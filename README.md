@@ -5,8 +5,12 @@
 ### 🌬️ "Predicting the air you breathe, powered by state-of-the-art MLOps."
 
 <p align="center">
-  <a href="https://airlyst.vercel.app" target="_blank">
+  <a href="https://air-lyst.vercel.app" target="_blank">
     <img src="https://img.shields.io/badge/Live_Dashboard-AeroVibe_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://air-lyst.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/🌐_Live_Demo-air--lyst.vercel.app-10B981?style=for-the-badge&logo=vercel&logoColor=white" alt="Live URL" />
   </a>
 </p>
 
