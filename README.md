@@ -1,12 +1,12 @@
 <div align="center">
 
-# 🌌 <span style="background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 3rem;">AeroVibe: Precision AQI Engine</span>
+# 🌌 <span style="background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 3rem;">AirLyst: Precision AQI Engine</span>
 
 ### 🌬️ "Predicting the air you breathe, powered by state-of-the-art MLOps."
 
 <p align="center">
   <a href="https://air-lyst.vercel.app" target="_blank">
-    <img src="https://img.shields.io/badge/Live_Dashboard-AeroVibe_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
+    <img src="https://img.shields.io/badge/Live_Dashboard-AirLyst_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
   </a>
   &nbsp;&nbsp;
   <a href="https://air-lyst.vercel.app" target="_blank">
@@ -26,7 +26,7 @@
 
 ## ⚡ Interactive System Architecture
 
-**AeroVibe** (formerly AirLyst) uses a decoupled, dual-stage pipeline that integrates weather & air quality ingestion, sliding temporal window engineering, model tournament selection, cloud-hosted registries, and live SHAP-based local explainability.
+**AirLyst** uses a decoupled, dual-stage pipeline that integrates weather & air quality ingestion, sliding temporal window engineering, model tournament selection, cloud-hosted registries, and live SHAP-based local explainability.
 
 ```mermaid
 flowchart TD
@@ -85,13 +85,13 @@ flowchart TD
 
 ## 📷 Interactive Dashboard Showcase
 
-Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboard** showing real-time observations, 72-hour forecast charts, and local AI explanation widgets:
+Here is a visual walk-through of the premium **AirLyst Next.js Frontend Dashboard** showing real-time observations, 72-hour forecast charts, and local AI explanation widgets:
 
 <div align="center">
   <table>
     <tr>
       <td width="33.3%" align="center">
-        <img src="assets/ssfg/AeroVibe%20Main%20Dashboard.png" alt="AeroVibe Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
+        <img src="assets/ssfg/AeroVibe%20Main%20Dashboard.png" alt="AirLyst Main Dashboard" style="border-radius: 12px; border: 2px solid #3B82F6;" />
         <br />
         <b>1. Main Dashboard View</b>
         <p><i>Real-time AQI dials, weather metrics, and daily predictions.</i></p>
@@ -116,7 +116,7 @@ Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboa
 
 ## ⚙️ Core MLOps Components Explained
 
-* **Feature Store Integration**: AeroVibe uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew.
+* **Feature Store Integration**: AirLyst uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew.
 * **Temporal Lags & Rolles**: Computes sliding temporal lags (`1h`, `3h`, `6h`, `24h`) and running statistics (6h & 24h moving averages of particulate concentrations).
 * **Model Tournament**: Retrains weekly. Competes Ridge, Random Forest, XGBoost, and LightGBM models using custom chronological time-series splitting to avoid future data leakage.
 * **Dynamic LLM Translations**: Integrates **OpenRouter API** with the **`google/gemini-2.5-flash`** model to translate technical air quality drivers into friendly, 2-sentence explanations dynamically.
