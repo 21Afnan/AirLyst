@@ -115,7 +115,7 @@ Here is a visual walk-through of the premium **AeroVibe Next.js Frontend Dashboa
 * **Feature Store Integration**: AeroVibe uses the **Hopsworks Feature Store** to store engineered targets, avoiding training-serving skew.
 * **Temporal Lags & Rolles**: Computes sliding temporal lags (`1h`, `3h`, `6h`, `24h`) and running statistics (6h & 24h moving averages of particulate concentrations).
 * **Model Tournament**: Retrains weekly. Competes Ridge, Random Forest, XGBoost, and LightGBM models using custom chronological time-series splitting to avoid future data leakage.
-* **Dynamic LLM Translations**: Integrates **OpenRouter API** with the **`google/gemini-2.5-flash`** model to translate technical air quality drivers into friendly, 1-sentence explanations dynamically.
+* **Dynamic LLM Translations**: Integrates **OpenRouter API** with the **`google/gemini-2.5-flash`** model to translate technical air quality drivers into friendly, 2-sentence explanations dynamically.
 * **Live SHAP Explanations**: The `/explain` endpoint dynamically aggregates and calculates the absolute SHAP values across all real-time hourly forecasts in memory, ensuring that the model's feature importance rankings instantly adapt to live weather and pollution patterns.
 
 ---
