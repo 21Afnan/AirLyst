@@ -46,6 +46,7 @@ graph TD
         APIClient["API Client (client.ts)"]
         AQICard["AQICard Component"]
         TrendChart["AQITrendChart Component"]
+        AIInsights["AIInsights Component"]
     end
 
     %% Connections
@@ -67,6 +68,7 @@ graph TD
     APIClient --> UI_Home
     UI_Home --> AQICard
     UI_Home --> TrendChart
+    UI_Home --> AIInsights
 ```
 
 ---
@@ -95,9 +97,9 @@ These modules represent the foundational settings, schemas, and logging structur
 * **Advanced:** Uses `RotatingFileHandler` with a cap of 5MB and keeps up to 3 backup log files. This avoids consuming the server's disk space over long running periods.
 
 #### 📄 [config.py](file:///c:/Users/Dell/Desktop/AirLyst/backend/src/utils/config.py)
-* **What it does:** Single source of truth for environments. Uses `dotenv` to load coordinates (default: Islamabad at Latitude 33.72, Longitude 73.04), Hopsworks API keys, and endpoint URLs.
+* **What it does:** Single source of truth for environments. Uses `dotenv` to load coordinates (default: Islamabad at Latitude 33.72, Longitude 73.04), Hopsworks API keys/parameters, and endpoint URLs.
 * **Basic (0):** Reads configuration parameters from `.env` so we do not hardcode secrets or coordinates.
-* **Advanced:** Validates required keys immediately upon loading. If crucial variables like `HOPSWORKS_API_KEY` are missing, it interrupts execution with a descriptive error. It also dynamically computes temporal sliding windows (`get_backfill_dates` for historical data and `get_update_dates` for daily increments).
+* **Advanced:** Validates required keys immediately upon loading. If crucial variables like `HOPSWORKS_API_KEY` are missing, it interrupts execution with a descriptive error. It also loads `HOPSWORKS_PROJECT` and `HOPSWORKS_HOST` configurations for seamless cloud synchronization and dynamically computes temporal sliding windows (`get_backfill_dates` for historical data and `get_update_dates` for daily increments).
 
 ---
 
@@ -198,17 +200,18 @@ This directory houses the model definitions, training loops, evaluation logic, a
 #### 📄 [model_loader.py](file:///c:/Users/Dell/Desktop/AirLyst/backend/src/ml/model_loader.py)
 * **What it does:** Utility to retrieve the trained model, scaler, and metadata.
 * **Basic (0):** Loads the `.joblib` files.
-* **Advanced:** Connects to the Hopsworks Model Registry to fetch the latest version of the model. If the Hopsworks API fails, it automatically falls back to reading the local `.joblib` files stored in `backend/models/`.
+* **Advanced:** Connects to the Hopsworks Model Registry using the project configuration arguments (`host=settings.HOPSWORKS_HOST`, `project=settings.HOPSWORKS_PROJECT`, and `api_key_value=settings.HOPSWORKS_KEY`) to fetch the latest version of the model. If the Hopsworks connection fails, it automatically falls back to reading local `.joblib` files stored in `backend/models/`.
 
 #### 📄 [inference.py](file:///c:/Users/Dell/Desktop/AirLyst/backend/src/ml/inference.py)
 * **What it does:** Runs the predictive pipeline for real-time inference.
 * **Basic (0):** Takes current weather and air quality readings and predicts the AQI.
 * **Advanced:** 
-  1. Fetches current/historical data (past 2 days) to populate lag features, along with future forecasts (next 3 days).
+  1. Fetches current/historical data (past 2 days) to populate lag features, along with future forecasts (next 3 days). Requests utilize `verify=False` and `urllib3.disable_warnings` to handle SSL proxy/validation issues in localized environments.
   2. Applies `FeatureEngineer` to construct identical feature structures as used during training.
   3. Segregates rows into "current" (the current hour) and "forecast" (the next 72 hours).
   4. Feeds variables to `StandardScaler` and makes predictions.
-  5. Computes live SHAP values for each individual prediction using `shap.TreeExplainer` on the winning model. This provides real-time explanations for why the forecast shifts (e.g., "pollution carrying over from previous hours").
+  5. Computes live SHAP values for each individual prediction using `shap.TreeExplainer` on the winning model.
+  6. Returns a structured dictionary: `{"current": predictions[0], "forecast": predictions[1:]}` for downstream consumption by routers.
 
 ---
 
@@ -225,7 +228,7 @@ The entrypoint and route definitions for our REST API.
 * **What it does:** Implements endpoints `/api/forecast` and `/api/forecast/explain`.
 * **Basic (0):** Exposes JSON responses for the frontend.
 * **Advanced:** 
-  * `/api/forecast`: Executes the inference pipeline, filters hourly predictions for the next 24 hours, groups predictions by day, and averages real-time SHAP values. It maps the top SHAP drivers to user-friendly reasons (e.g., mapping `us_aqi_lag_1h` to "pollution carrying over from previous hours" and `nitrogen_dioxide` to "traffic exhaust fumes").
+  * `/api/forecast`: Executes the inference pipeline, filters hourly predictions, groups predictions by day, and averages real-time SHAP values. It formats predictions with `predicted_aqi` and `actual_aqi` fields and maps the top SHAP drivers to user-friendly reasons (e.g., mapping `us_aqi_lag_1h` to "pollution already floating in the air from previous hours", `nitrogen_dioxide` to "smoke and exhaust fumes from traffic traffic", etc.).
   * `/api/forecast/explain`: Parses the textual SHAP report generated during training, extracts rankings and weights, and returns structured JSON representation for use in dashboards.
 
 ---
@@ -238,10 +241,10 @@ The frontend is a Next.js 14 React application, styled using Tailwind CSS and Lu
 * **What it does:** The main interface dashboard.
 * **Basic (0):** Manages the dashboard's React state, displays loading circles, handles errors, and renders layout cards.
 * **Advanced:** 
-  * Triggers API fetches and sets up a 5-minute auto-refresh cycle (`setInterval`).
+  * Triggers API fetches and sets up a 5-minute auto-refresh cycle.
   * Features a dynamic background with animated decorative elements.
   * Analyzes predicted AQI scores to apply matching color gradients (emerald green, amber yellow, orange, and rose red) for high-contrast warnings.
-  * Iterates through summaries and parses real-time SHAP text strings.
+  * Iterates through daily summaries and parses real-time SHAP text strings.
 
 ### 📄 [client.ts](file:///c:/Users/Dell/Desktop/AirLyst/frontend/lib/api/client.ts)
 * **What it does:** Handles client-side HTTP requests to the FastAPI backend.
@@ -258,33 +261,33 @@ The diagram below illustrates how components interact during the data ingestion,
 
 ```
 [Open-Meteo REST APIs]
-         │ (Ingestion)
+         │ (Ingestion with verify=False)
          ▼
  [data_merger.py] ──► [feature_engineer.py] ──► [feature_store_client.py]
-                                                          │ (Upload / Read)
-                                                          ▼
-                                                [Hopsworks Feature Store]
-                                                          │ (Retrieve Features)
-                                                          ▼
-                                                 [preprocessing.py]
-                                                          │ (Scale & Split)
-                                                          ▼
-                                                  [training.py] ◄──► [models.py]
-                                                          │ (Find best model)
-                                                          ▼
-                                               [Hopsworks Model Registry]
-                                                          │ (Download Latest)
-                                                          ▼
-                                                  [inference.py]
-                                                          │ (Predict & SHAP)
-                                                          ▼
-                                                 [forecast.py] (FastAPI Router)
-                                                          │ (HTTP JSON API)
-                                                          ▼
-                                                  [client.ts] (Next.js Fetch)
-                                                          │ (Render State)
-                                                          ▼
-                                                    [page.tsx] (UI View)
+                                                           │ (Upload / Read)
+                                                           ▼
+                                                 [Hopsworks Feature Store]
+                                                           │ (Retrieve Features)
+                                                           ▼
+                                                  [preprocessing.py]
+                                                           │ (Scale & Split)
+                                                           ▼
+                                                   [training.py] ◄──► [models.py]
+                                                           │ (Find best model)
+                                                           ▼
+                                                [Hopsworks Model Registry]
+                                                           │ (Download Latest)
+                                                           ▼
+                                                   [inference.py] (Returns Dict)
+                                                           │ (Predict & Live SHAP)
+                                                           ▼
+                                                  [forecast.py] (FastAPI Router)
+                                                           │ (HTTP JSON API)
+                                                           ▼
+                                                   [client.ts] (Next.js Fetch / Fallback)
+                                                           │ (Render State)
+                                                           ▼
+                                                     [page.tsx] (UI View)
 ```
 
 ---
