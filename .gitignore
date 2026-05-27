@@ -48,6 +48,9 @@ data/
 *.parquet
 *.json
 !backend/src/utils/config.json  # Keep config structure if needed (but ignore secrets)
+!frontend/package.json
+!frontend/tsconfig.json
+!frontend/components.json
 
 # Model Artifacts
 models/
