@@ -4,13 +4,20 @@
 
 ### 🌬️ "Predicting the air you breathe, powered by state-of-the-art MLOps."
 
-<p align="center">
+<div align="center">
+  <h3>🚀 <a href="https://air-lyst.vercel.app" target="_blank"><b>Click Here to View the Live AirLyst Dashboard</b></a> 🚀</h3>
   <a href="https://air-lyst.vercel.app" target="_blank">
-    <img src="https://img.shields.io/badge/Live_Dashboard-AirLyst_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
+    <img src="https://img.shields.io/badge/🌐_Live_Dashboard-AirLyst_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
   </a>
-  &nbsp;&nbsp;
-  <a href="https://air-lyst.vercel.app" target="_blank">
-    <img src="https://img.shields.io/badge/🌐_Live_Demo-air--lyst.vercel.app-10B981?style=for-the-badge&logo=vercel&logoColor=white" alt="Live URL" />
+</div>
+<br/>
+
+<p align="center">
+  <a href="https://github.com/21Afnan/AirLyst/actions/workflows/feature_pipeline.yml">
+    <img src="https://github.com/21Afnan/AirLyst/actions/workflows/feature_pipeline.yml/badge.svg" alt="Feature Pipeline" />
+  </a>
+  <a href="https://github.com/21Afnan/AirLyst/actions/workflows/training_pipeline.yml">
+    <img src="https://github.com/21Afnan/AirLyst/actions/workflows/training_pipeline.yml/badge.svg" alt="Training Pipeline" />
   </a>
 </p>
 
@@ -151,6 +158,58 @@ flowchart TD
 * **Dynamic AI Translations (`src/api/routes/forecast.py`)**: Integrates OpenRouter API with `google/gemini-2.5-flash` to dynamically translate technical air quality drivers (derived via SHAP) into friendly, 2-sentence explanations.
 * **Live SHAP Explanations (`src/ml/inference.py`)**: The inference pipeline calculates absolute SHAP values across real-time hourly forecasts in memory, ensuring feature importance rankings adapt to live patterns instantly.
 * **FastAPI Service (`src/api/`)**: Provides REST endpoints with CORS and automated fallback configurations, serving both real-time metrics and explainability insights.
+
+---
+
+## 🤖 Automated MLOps Pipelines & Hopsworks Integration
+
+AirLyst leverages GitHub Actions for fully automated data ingestion and model training. The system seamlessly integrates with **Hopsworks** to manage the Feature Store and Model Registry.
+
+### 1️⃣ Feature Pipeline Action (Daily)
+Automated daily ingestion of weather and air quality data, feature engineering, and uploading to the Hopsworks Feature Store.
+
+<details>
+<summary><b>Click to expand Feature Pipeline Execution Logs</b></summary>
+<br/>
+<div align="center">
+  <img src="backend/Githubactions_ima_acc/feature_pipeline.png" alt="Feature Pipeline 1" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <img src="backend/Githubactions_ima_acc/feat2.png" alt="Feature Pipeline 2" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <img src="backend/Githubactions_ima_acc/feat3.png" alt="Feature Pipeline 3" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <br/>
+  <b>Hopsworks Feature Group:</b><br/>
+  <img src="backend/Githubactions_ima_acc/featuregroup%20hopsworks%20.png" alt="Hopsworks Feature Group" style="border-radius: 8px; margin-top: 10px; max-width: 100%;" />
+</div>
+</details>
+
+<br/>
+
+### 2️⃣ Model Tournament & Training Action (Weekly)
+Automated weekly chronological split training. Competes multiple models (Ridge, RF, XGBoost, LightGBM) and registers the champion model to the Hopsworks Model Registry.
+
+**🏆 Current Model Tournament Results (Hopsworks):**
+
+| Model | MAE | RMSE | R² Score | Composite Score | Rank |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **LightGBM (Winner) 🥇** | **1.7290** | **3.2361** | **0.9860** | **4.0** | **1st** |
+| Random Forest | 1.6628 | 3.5025 | 0.9836 | 7.0 | 2nd |
+| XGBoost | 1.8900 | 3.4636 | 0.9840 | 7.0 | 2nd |
+| Ridge Regression | 2.9303 | 4.7994 | 0.9693 | 12.0 | 4th |
+
+*Composite score is calculated based on cumulative rank across MAE, RMSE, and R² (lower is better).*
+
+<details>
+<summary><b>Click to expand Model Tournament Execution Logs</b></summary>
+<br/>
+<div align="center">
+  <img src="backend/Githubactions_ima_acc/model_tournamaent%20action1.png" alt="Model Tournament 1" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <img src="backend/Githubactions_ima_acc/model_actions2.png" alt="Model Tournament 2" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <img src="backend/Githubactions_ima_acc/model_Action3.png" alt="Model Tournament 3" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <img src="backend/Githubactions_ima_acc/modelaction4.png" alt="Model Tournament 4" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
+  <br/>
+  <b>Hopsworks Model Registry:</b><br/>
+  <img src="backend/Githubactions_ima_acc/hospworks%20model_registry.png" alt="Hopsworks Model Registry" style="border-radius: 8px; margin-top: 10px; max-width: 100%;" />
+</div>
+</details>
 
 ---
 
