@@ -168,10 +168,9 @@ AirLyst leverages GitHub Actions for fully automated data ingestion and model tr
 ### 1️⃣ Feature Pipeline Action (Daily)
 Automated daily ingestion of weather and air quality data, feature engineering, and uploading to the Hopsworks Feature Store.
 
-<details>
-<summary><b>Click to expand Feature Pipeline Execution Logs</b></summary>
-<br/>
 <div align="center">
+  <b>Feature Pipeline Execution Logs:</b><br/>
+  <br/>
   <img src="backend/Githubactions_ima_acc/feature_pipeline.png" alt="Feature Pipeline 1" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
   <img src="backend/Githubactions_ima_acc/feat2.png" alt="Feature Pipeline 2" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
   <img src="backend/Githubactions_ima_acc/feat3.png" alt="Feature Pipeline 3" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
@@ -179,7 +178,6 @@ Automated daily ingestion of weather and air quality data, feature engineering, 
   <b>Hopsworks Feature Group:</b><br/>
   <img src="backend/Githubactions_ima_acc/featuregroup%20hopsworks%20.png" alt="Hopsworks Feature Group" style="border-radius: 8px; margin-top: 10px; max-width: 100%;" />
 </div>
-</details>
 
 <br/>
 
@@ -197,10 +195,9 @@ Automated weekly chronological split training. Competes multiple models (Ridge, 
 
 *Composite score is calculated based on cumulative rank across MAE, RMSE, and R² (lower is better).*
 
-<details>
-<summary><b>Click to expand Model Tournament Execution Logs</b></summary>
-<br/>
 <div align="center">
+  <b>Model Tournament Execution Logs:</b><br/>
+  <br/>
   <img src="backend/Githubactions_ima_acc/model_tournamaent%20action1.png" alt="Model Tournament 1" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
   <img src="backend/Githubactions_ima_acc/model_actions2.png" alt="Model Tournament 2" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
   <img src="backend/Githubactions_ima_acc/model_Action3.png" alt="Model Tournament 3" style="border-radius: 8px; margin-bottom: 10px; max-width: 100%;" />
@@ -209,7 +206,6 @@ Automated weekly chronological split training. Competes multiple models (Ridge, 
   <b>Hopsworks Model Registry:</b><br/>
   <img src="backend/Githubactions_ima_acc/hospworks%20model_registry.png" alt="Hopsworks Model Registry" style="border-radius: 8px; margin-top: 10px; max-width: 100%;" />
 </div>
-</details>
 
 ---
 
