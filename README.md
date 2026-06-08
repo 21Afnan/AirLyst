@@ -5,7 +5,7 @@
 ### 🌬️ "Predicting the air you breathe, powered by state-of-the-art MLOps."
 
 <div align="center">
-  <h3>🚀 <a href="https://air-lyst.vercel.app" target="_blank"><b>Click Here to View the Live AirLyst Dashboard</b></a> 🚀</h3>
+  <h3>🚀 <b>Frontend Live at:</b> <a href="https://air-lyst.vercel.app" target="_blank">https://air-lyst.vercel.app</a> 🚀</h3>
   <a href="https://air-lyst.vercel.app" target="_blank">
     <img src="https://img.shields.io/badge/🌐_Live_Dashboard-AirLyst_Web-00f2fe?style=for-the-badge&logo=vercel&logoColor=white&labelColor=0d1b2a" alt="Live Demo" />
   </a>
