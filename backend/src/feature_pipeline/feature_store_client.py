@@ -83,7 +83,7 @@ class FeatureStoreClient:
 
             # 4. Insert Data
             logger.info(f"Inserting {len(df)} records into Feature Store...")
-            aqi_fg.insert(df, write_options={"wait_for_job": False})
+            aqi_fg.insert(df)
             logger.info(f"SUCCESS: Data successfully pushed to '{group_name}'")
             
             # 5. Get actual count after upload
