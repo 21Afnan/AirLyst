@@ -82,7 +82,6 @@ class FeatureStoreClient:
             num_appended = len([t for t in incoming_times_str if t not in existing_times_str])
 
             # 4. Insert Data
-            logger.info(f"Inserting {len(df)} records into Feature Store...")
             # Disable automatic materialization to avoid the 415 SDK error on trigger
             aqi_fg.insert(df, write_options={"start_offline_materialization": False})
             
