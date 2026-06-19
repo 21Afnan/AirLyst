@@ -82,24 +82,8 @@ class FeatureStoreClient:
             num_appended = len([t for t in incoming_times_str if t not in existing_times_str])
 
             # 4. Insert Data
-            # Disable automatic materialization to avoid the 415 SDK error on trigger
-            aqi_fg.insert(df, write_options={"start_offline_materialization": False})
-            
-            # Now trigger the materialization job manually, passing env_vars={} to force JSON content-type
-            logger.info("Manually launching materialization job with JSON payload...")
-            try:
-                job_run = aqi_fg.materialization_job.run(
-                    args=aqi_fg.materialization_job.config.get("defaultArgs", ""),
-                    await_termination=False,
-                    env_vars={}  # Forces the SDK to use application/json content-type
-                )
-                if job_run is None:
-                    logger.info("Materialization job is already running. Skipping new launch.")
-                else:
-                    logger.info("Materialization job successfully launched.")
-            except Exception as job_err:
-                logger.warning(f"Could not trigger materialization job: {job_err}")
-
+            logger.info(f"Inserting {len(df)} records into Feature Store...")
+            aqi_fg.insert(df)
             logger.info(f"SUCCESS: Data successfully pushed to '{group_name}'")
             
             # 5. Get actual count after upload
