@@ -28,6 +28,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Patch Hopsworks SDK
+        run: |
+          python -c "
+          import pathlib, hopsworks_common.core.execution_api as api
+          path = pathlib.Path(api.__file__)
+          content = path.read_text()
+          path.write_text(content.replace('use_json = True', 'use_json = False'))
+          "
+
       - name: Run Model Tournament & Register
         env:
           HOPSWORKS_API_KEY: ${{ secrets.HOPSWORKS_API_KEY }}
